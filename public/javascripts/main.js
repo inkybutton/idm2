@@ -127,7 +127,7 @@ function setupGestureCapture(elem){
     elem.onmouseup = stopDraw;
 
     elem.ontouchstart = startDraw;
-    elem.ontouchstop = stopDraw;
+    elem.ontouchend = stopDraw;
     elem.ontouchmove = drawMouse;
 
 }
@@ -156,6 +156,7 @@ function setupGrowingCanvas(canvas,container){
 function startDraw(e) {
 	if (e.touches) {
 		// Touch event
+	    e.preventDefault();
 		for (var i = 1; i <= e.touches.length; i++) {
 			cb_lastPoints[i] = getCoords(e.touches[i - 1]); // Get info for finger #1
 		}
