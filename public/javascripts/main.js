@@ -3,6 +3,7 @@ var states = StateMachine.create({
     events: [
 	{ name: 'startCapture', from: 'IntroMovie', to: 'PrepareForCapture'}, 
 	{ name: 'beginInput', from: 'Waiting', to: 'InputInProgress'},
+	{ name: 'moreInput', from: 'InputInProgress', to: 'InputInProgress'},
 	{ name: 'endInput', from: 'InputInProgress', to: 'PostInput'},
 	{ name: 'waitTimeout', from: 'Waiting', to: 'InputTimedOut'},
 	{ name: 'startWaiting', from: ['PostInput','InputTimedOut','PrepareForCapture'],to: 'Waiting'},
@@ -11,8 +12,8 @@ var states = StateMachine.create({
 });
 
 var gestures = [
-    {name: "play", url:"", desc: "Play"},
-    {name: "pause", url:"", desc: "Pause"}
+    {name: "play", url:"", desc: "Play",captured: null},
+    {name: "pause", url:"", desc: "Pause", captured: null}
     ];
 
 var getNextIteratedGesture = createIterator(gestures);
@@ -39,9 +40,18 @@ var bgColour = "rgb(0,0,0)";
 var penColour = "rgb(245,236,176)";
 var labelColour = "rgb(255,255,255)";
 
+var inputCapture = function(container){
+	return function(event,from,to,newGesturePosition){
+		//TODO Put handler code here
+		container.push(newGesturePosition);
+	};
+}
+		
 states.onbeginInput = function(event,from,to){
     //alert("Input started!");
 };
+
+
 
 states.onPostInput = function(event,from,to){
     //cb_ctx.fillStyle = bgColour;
@@ -67,6 +77,9 @@ states.onSendCapture = function(event,from,to){
 
 states.onstartWaiting = function(event,from,to,gesture){
     drawStatusText(gesture.desc);
+    gesture.captured = new Array();
+    gesture.captured.desc = gesture.desc;
+    states.onmoreInput = inputCapture(gesture.captured);
 };
 
 states.onPrepareForCapture = function(){
@@ -193,7 +206,7 @@ function drawMouse(e) {
 	cb_ctx.stroke();
 	cb_ctx.closePath();
 	cb_ctx.beginPath();
-
+	states.moreInput();
 	return false;
 }
 
