@@ -35,20 +35,43 @@ var cb_ctx = null;
 var cb_lastPoints = null;
 var cb_easing = 0.4;
 var currentGesture = Array();
+var timer = createTimer();
 
 var bgColour = "rgb(0,0,0)";
 var penColour = "rgb(245,236,176)";
 var labelColour = "rgb(255,255,255)";
 
+
+function serialiseTouchPoints(touchevt,timer){
+    var time = lap(timer);
+    var touchesArray = Array();
+    if (touchevt.touches != undefined && touchevt.touches != null){
+	for (var i = 0;i < touchevt.touches.length;i++){
+	    var touchCoords = getCoords(touchevt.touches[i]);
+	    touchesArray[touchevt.touches[i].identifier] = touchCoords;
+	}
+	return {time: time,touches:touchesArray};
+    } else {
+	touchesArray[0] = getCoords(touchevt);
+	return {time:time,touches:touchesArray};
+    }
+}	
+
+function logTouch(serialisedTouch){
+    console.log("Time: ",serialisedTouch.time,", and we have num touch points ",serialisedTouch.touches);
+}
+
 var inputCapture = function(container){
 	return function(event,from,to,newGesturePosition){
 		//TODO Put handler code here
-		container.push(newGesturePosition);
+	    var serialised = serialiseTouchPoints(newGesturePosition,timer);
+	    logTouch(serialised);
+	    container.push(serialised);
 	};
 }
 		
 states.onbeginInput = function(event,from,to){
-    //alert("Input started!");
+    timer = start(timer);
 };
 
 
@@ -76,7 +99,7 @@ states.onSendCapture = function(event,from,to){
 };
 
 states.onstartWaiting = function(event,from,to,gesture){
-    drawStatusText(gesture.desc);
+    drawStatusText(gesture.desc,cb_ctx);
     gesture.captured = new Array();
     gesture.captured.desc = gesture.desc;
     states.onmoreInput = inputCapture(gesture.captured);
@@ -108,15 +131,18 @@ function createIterator(arrayToIterate){
 	}
     };
 }
-
+/*
 function clearScreen(canvas,context,colour){
     context.fillStyle = colour;
     context.fillRect(0,0,canvas.width,canvas.height);
 }
+*/
 
-function drawStatusText(statusText){
-    cb_ctx.fillStyle = labelColour;
-    cb_ctx.fillText(statusText,10,50);
+function drawStatusText(statusText,context){
+    var oldColour = context.fillStyle;
+    context.fillStyle = labelColour;
+    context.fillText(statusText,10,50);
+    context.fillStyle = oldColour;
 }
 
 /* Should only be called during 
@@ -206,7 +232,7 @@ function drawMouse(e) {
 	cb_ctx.stroke();
 	cb_ctx.closePath();
 	cb_ctx.beginPath();
-	states.moreInput();
+	states.moreInput(e);
 	return false;
 }
 
@@ -219,7 +245,6 @@ function drawLine(sX, sY, eX, eY) {
 
 // Get the coordinates for a mouse or touch event
 function getCoords(e) {
-    //alert("hello");
 	if (e.offsetX) {
 		return { x: e.offsetX, y: e.offsetY };
 	}
