@@ -69,9 +69,14 @@ var inputCapture = function(container){
 	    container.push(serialised);
 	};
 }
-		
+
 states.onbeginInput = function(event,from,to){
-    timer = start(timer);
+    if (states.can(event)){
+	// This means we haven't entered InputInProgress. So this is when the first touch is fired.
+	timer = start(timer);
+    } else {
+	return false;
+    }
 };
 
 
@@ -162,12 +167,18 @@ function setupGestureCapture(elem){
     context.beginPath();
     
     // For debugging on computer
-    elem.onmousedown = startDraw;
-    elem.onmouseup = stopDraw;
-
-    elem.ontouchstart = startDraw;
-    elem.ontouchend = stopDraw;
-    elem.ontouchmove = drawMouse;
+    //elem.onmousedown = startDraw;
+    elem.addEventListener('mousedown',startDraw);
+    elem.addEventListener('mousedown',states.beginInput);
+    elem.addEventListener('mousemove',drawMouse);
+    elem.addEventListener('mouseup',stopDraw);
+    //elem.onmouseup = stopDraw;
+    elem.addEventListener('touchstart',startDraw);
+    elem.addEventListener('touchstart',states.beginInput);
+    //elem.ontouchstart = startDraw;
+    elem.addEventListener('touchend',stopDraw);
+    // elem.ontouchend = stopDraw;
+    elem.addEventListener("touchmove",drawMouse);
 
 }
 
@@ -191,7 +202,6 @@ function setupGrowingCanvas(canvas,container){
     }
 }
 
-
 function startDraw(e) {
 	if (e.touches) {
 		// Touch event
@@ -203,7 +213,6 @@ function startDraw(e) {
 	else {
 		// Mouse event
 		cb_lastPoints[0] = getCoords(e);
-		cb_canvas.onmousemove = drawMouse;
 	}
     states.beginInput();	
     return false;
