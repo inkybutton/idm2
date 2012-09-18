@@ -1,7 +1,7 @@
 var states = StateMachine.create({
-    initial: 'IntroMovie',
+    initial: 'Preroll',
     events: [
-	{ name: 'startCapture', from: 'IntroMovie', to: 'PrepareForCapture'}, 
+	{ name: 'startCapture', from: 'Preroll', to: 'PrepareForCapture'}, 
 	{ name: 'beginInput', from: 'Waiting', to: 'InputInProgress'},
 	{ name: 'moreInput', from: 'InputInProgress', to: 'InputInProgress'},
 	{ name: 'endInput', from: 'InputInProgress', to: 'PostInput'},
@@ -12,7 +12,7 @@ var states = StateMachine.create({
 });
 
 var gestures = [
-    {name: "play", url:"", desc: "Play",captured: null},
+    {name: "play", cues:[{type:"audiogroup",data:[{url:"assets/cues/Play.ogg"},{url:"assets/cues/Play.aac"}]}],desc: "Play",captured: null},
     {name: "pause", url:"", desc: "Pause", captured: null}
     ];
 
@@ -63,7 +63,7 @@ function logTouch(serialisedTouch){
 
 var inputCapture = function(container){
 	return function(event,from,to,newGesturePosition){
-		//TODO Put handler code here
+	    //TODO Put handler code here
 	    var serialised = serialiseTouchPoints(newGesturePosition,timer);
 	    logTouch(serialised);
 	    container.push(serialised);
@@ -78,8 +78,6 @@ states.onbeginInput = function(event,from,to){
 	return false;
     }
 };
-
-
 
 states.onPostInput = function(event,from,to){
     //cb_ctx.fillStyle = bgColour;
@@ -103,10 +101,25 @@ states.onSendCapture = function(event,from,to){
     cb_canvas.ontouchmove = null;
 };
 
+function playAudioCue(data){
+    
+}    
+
+function performCue(cues){
+    var results = new Array();
+    for (var k in cues){
+	if (cues[k].type == "audiogroup"){
+	    results[k] = playAudioCue(cues[k].data);
+	}
+    }
+    return results;
+}
+
 states.onstartWaiting = function(event,from,to,gesture){
     drawStatusText(gesture.desc,cb_ctx);
     gesture.captured = new Array();
     gesture.captured.desc = gesture.desc;
+    performCue(gesture.cues);
     states.onmoreInput = inputCapture(gesture.captured);
 };
 
