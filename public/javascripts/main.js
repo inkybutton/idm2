@@ -1,7 +1,7 @@
 var states = StateMachine.create({
     initial: 'Preroll',
     events: [
-	{ name: 'startCapture', from: 'Preroll', to: 'PrepareForCapture'}, 
+	{ name: 'startCapture', from: 'Preroll', to: 'PrepareForCapture'},
 	{ name: 'beginInput', from: 'Waiting', to: 'InputInProgress'},
 	{ name: 'moreInput', from: 'InputInProgress', to: 'InputInProgress'},
 	{ name: 'endInput', from: 'InputInProgress', to: 'PostInput'},
@@ -11,24 +11,26 @@ var states = StateMachine.create({
     ]
 });
 
-var gestures = [
-    {name: "play", cues:[{type:"audiogroup",data:[{url:"assets/cues/Play.ogg"},{url:"assets/cues/Play.aac"}]}],desc: "Play",captured: null},
-    {name: "pause", url:"", desc: "Pause", captured: null}
-    ];
+var fingerSprite;
+var playAudioCue;
+function AudioPlayer(elem){
+    //console.debug(elem);
+    return function(url){
+	elem.src = url;
+	elem.play();
+    };
+}
 
-var getNextIteratedGesture = createIterator(gestures);
-
-/*
-  This function generates a new array for the gesture capture
-  that the draw functions can mutate and update.
-*/
-var getNextGesture = function(){
-    var array = getNextIteratedGesture();
-    if (array != null){
-	array["capturedGesture"] = Array();
+function performCue(cues){
+    var results = new Array();
+    for (var k in cues){
+	var cueType = cues[k].type;
+	if (cueType == "audio"){
+	    results[k] = playAudioCue(cues[k].data);
+	}
     }
-    return array;
-};
+    return results;
+}
 
 var cb_canvas = null;
 var cb_ctx = null;
@@ -41,20 +43,22 @@ var bgColour = "rgb(0,0,0)";
 var penColour = "rgb(245,236,176)";
 var labelColour = "rgb(255,255,255)";
 
-
-function serialiseTouchPoints(touchevt,timer){
-    var time = lap(timer);
-    var touchesArray = Array();
+function TouchArray(touchevt){
+    var touchesArray = new Array();
     if (touchevt.touches != undefined && touchevt.touches != null){
 	for (var i = 0;i < touchevt.touches.length;i++){
 	    var touchCoords = getCoords(touchevt.touches[i]);
 	    touchesArray[touchevt.touches[i].identifier] = touchCoords;
 	}
-	return {time: time,touches:touchesArray};
+	return touchesArray;
     } else {
 	touchesArray[0] = getCoords(touchevt);
-	return {time:time,touches:touchesArray};
+	return touchesArray;
     }
+}
+
+function serialiseTouchPoints(touches,timer){
+    return {time:lap(timer),touches:touches};
 }	
 
 function logTouch(serialisedTouch){
@@ -63,25 +67,20 @@ function logTouch(serialisedTouch){
 
 var inputCapture = function(container){
 	return function(event,from,to,newGesturePosition){
-	    //TODO Put handler code here
-	    var serialised = serialiseTouchPoints(newGesturePosition,timer);
-	    logTouch(serialised);
+	    clearScreen(cb_canvas,cb_ctx,bgColour);
+	    var touches = TouchArray(newGesturePosition);
+	    var serialised = serialiseTouchPoints(touches,timer);
+	    drawFingers(cb_ctx,touches);
+	    //logTouch(serialised);
 	    container.push(serialised);
 	};
 }
-
+		
 states.onbeginInput = function(event,from,to){
-    if (states.can(event)){
-	// This means we haven't entered InputInProgress. So this is when the first touch is fired.
-	timer = start(timer);
-    } else {
-	return false;
-    }
+    timer = start(timer);
 };
 
 states.onPostInput = function(event,from,to){
-    //cb_ctx.fillStyle = bgColour;
-    //cb_ctx.fillRect(0,0,cb_canvas.width,cb_canvas.height);
     clearScreen(cb_canvas,cb_ctx,bgColour);
     var nextGesture = getNextGesture();
     if (nextGesture != null){
@@ -101,24 +100,13 @@ states.onSendCapture = function(event,from,to){
     cb_canvas.ontouchmove = null;
 };
 
-function playAudioCue(data){
-    
-}    
-
-function performCue(cues){
-    var results = new Array();
-    for (var k in cues){
-	if (cues[k].type == "audiogroup"){
-	    results[k] = playAudioCue(cues[k].data);
-	}
-    }
-    return results;
-}
-
 states.onstartWaiting = function(event,from,to,gesture){
-    drawStatusText(gesture.desc,cb_ctx);
     gesture.captured = new Array();
-    gesture.captured.desc = gesture.desc;
+    //gesture.captured.desc = gesture.desc;
+    gesture.captured.name = gesture.name;
+    if (gesture.desc != undefined && gesture.desc != null){
+	drawStatusText(gesture.desc,cb_ctx);
+    }
     performCue(gesture.cues);
     states.onmoreInput = inputCapture(gesture.captured);
 };
@@ -126,6 +114,7 @@ states.onstartWaiting = function(event,from,to,gesture){
 states.onPrepareForCapture = function(){
     setupGestureCapture(document.getElementById("gestureCapture"));
     var g = getNextGesture();
+    //drawFingerSprite(cb_ctx,0,0);
     if (g != null){
 	states.startWaiting(g);
     } else {
@@ -133,28 +122,13 @@ states.onPrepareForCapture = function(){
     }
 }
 
+// Entry point
 window.addEventListener('load', function(){
-    //init();
+    var config = getConfig();
+    playAudioCue = AudioPlayer(config.cuePlayer);
+    fingerSprite = config.fingerSprite;
     states.startCapture();
 },false);
-
-function createIterator(arrayToIterate){
-    var i = 0;
-    return function(){
-	if (i <= arrayToIterate.length-1){
-	    i++;
-	   return arrayToIterate[i-1];
-	} else {
-	    return null;
-	}
-    };
-}
-/*
-function clearScreen(canvas,context,colour){
-    context.fillStyle = colour;
-    context.fillRect(0,0,canvas.width,canvas.height);
-}
-*/
 
 function drawStatusText(statusText,context){
     var oldColour = context.fillStyle;
@@ -180,18 +154,12 @@ function setupGestureCapture(elem){
     context.beginPath();
     
     // For debugging on computer
-    //elem.onmousedown = startDraw;
-    elem.addEventListener('mousedown',startDraw);
-    elem.addEventListener('mousedown',states.beginInput);
-    elem.addEventListener('mousemove',drawMouse);
-    elem.addEventListener('mouseup',stopDraw);
-    //elem.onmouseup = stopDraw;
-    elem.addEventListener('touchstart',startDraw);
-    elem.addEventListener('touchstart',states.beginInput);
-    //elem.ontouchstart = startDraw;
-    elem.addEventListener('touchend',stopDraw);
-    // elem.ontouchend = stopDraw;
-    elem.addEventListener("touchmove",drawMouse);
+    elem.onmousedown = startDraw;
+    elem.onmouseup = stopDraw;
+
+    elem.ontouchstart = startDraw;
+    elem.ontouchend = stopDraw;
+    elem.ontouchmove = drawMouse;
 
 }
 
@@ -215,6 +183,17 @@ function setupGrowingCanvas(canvas,container){
     }
 }
 
+//function drawFingerSprite(sprite,context,x,y){
+//    context.drawImage(sprite.data,x-fingerSprite.centreX,y-fingerSprite.centreY);
+//}
+
+function drawFingers(context,touches){
+    for (var touch in touches){
+	var curr = touches[touch];
+	context.drawImage(fingerSprite.data,curr.x-fingerSprite.centreX,curr.y-fingerSprite.centreY);
+    }
+}
+
 function startDraw(e) {
 	if (e.touches) {
 		// Touch event
@@ -226,6 +205,7 @@ function startDraw(e) {
 	else {
 		// Mouse event
 		cb_lastPoints[0] = getCoords(e);
+		cb_canvas.onmousemove = drawMouse;
 	}
     states.beginInput();	
     return false;
