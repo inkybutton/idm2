@@ -102,6 +102,8 @@ states.onSendCapture = function(event,from,to){
 };
 
 states.onrun = function(event,from,to,player,canvas){
+    // for Mobile browsers, user intervention is needed to trigger loading
+    player.style.display = "block";
     player.addEventListener('canplaythrough',function(){
 	canvas.style.display = "none";
 	player.style.display = "block";
