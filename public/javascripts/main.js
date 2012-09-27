@@ -1,6 +1,7 @@
 var states = StateMachine.create({
-    initial: 'Preroll',
+    initial: 'Idle',
     events: [
+	{ name: 'run',from:'Idle',to:'Preroll'},
 	{ name: 'startCapture', from: 'Preroll', to: 'PrepareForCapture'},
 	{ name: 'beginInput', from: 'Waiting', to: 'InputInProgress'},
 	{ name: 'moreInput', from: 'InputInProgress', to: 'InputInProgress'},
@@ -100,6 +101,19 @@ states.onSendCapture = function(event,from,to){
     cb_canvas.ontouchmove = null;
 };
 
+states.onrun = function(event,from,to,player,canvas){
+    player.addEventListener('canplaythrough',function(){
+	canvas.style.display = "none";
+	player.style.display = "block";
+	player.play();
+    });
+    player.addEventListener('ended',function(){
+	player.style.display = "none";
+	canvas.style.display = "block";
+	states.startCapture();
+    });			    
+}
+
 states.onstartWaiting = function(event,from,to,gesture){
     gesture.captured = new Array();
     //gesture.captured.desc = gesture.desc;
@@ -127,7 +141,8 @@ window.addEventListener('load', function(){
     var config = getConfig();
     playAudioCue = AudioPlayer(config.cuePlayer);
     fingerSprite = config.fingerSprite;
-    states.startCapture();
+    states.run(config.introVideo,config.canvas);
+    //states.startCapture();
 },false);
 
 function drawStatusText(statusText,context){

@@ -7,6 +7,7 @@
        var sprite = document.getElementById("glow");
        return {
           "canvas":document.getElementById("gestureCapture"),
+          "introVideo":document.getElementById("introVideo"),
           "cuePlayer":document.getElementById("audioCuePlayer"),
           "fingerSprite":{data:sprite,
                           centreX:sprite.width/2,
@@ -25,8 +26,9 @@
 <body>
 <img src="public/images/glow.png" id="glow" style="display:none">
 <canvas id="gestureCapture" width="400" height="500">
-  <strong> Your browser isn't new enough to support our gesture capturing. Please upgrade your </strong>
+  <strong> Your browser isn't new enough to support gesture capturing. Please upgrade your operating system and/or browser. </strong>
 </canvas>
 <audio id="audioCuePlayer"></audio>
+<video id="introVideo" src="public/assets/intro.mp4" width="640" height="480" style="display:none"></video>
 </body>
 </html>

@@ -8,3 +8,20 @@ body {
 #gestureCapture {
     position:relative;
 }
+
+#video {
+/*    margin: 0 auto;
+    width:640px;
+    height:480px;
+    position:absolute;
+    top: 10%;
+    left:0;
+    right:0;
+    margin-left:auto;
+    margin-right:auto;
+  position: absolute;
+  width: 60%;
+  height: 30%;
+  left: 20%;
+  top: 35%;*/
+}
