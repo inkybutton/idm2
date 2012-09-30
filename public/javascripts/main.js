@@ -26,6 +26,8 @@ function performCue(cues){
     var results = new Array();
     for (var k in cues){
 	var cueType = cues[k].type;
+	if (cueType == "audiogroup"){
+	}
 	if (cueType == "audio"){
 	    results[k] = playAudioCue(cues[k].data);
 	}
@@ -78,7 +80,21 @@ var inputCapture = function(container){
 }
 		
 states.onbeginInput = function(event,from,to){
-    timer = start(timer);
+	// First finger, starts the timer.
+	//alert("yep!")
+	timer = start(timer);
+};
+
+// onendInput is called whenever a finger stopped
+// touching the screen. It determines whether all fingers
+// have left the screen. If not, it cancels the event.
+states.onbeforeendInput = function(event,from,to,touchevt){
+    if (touchevt.touches != undefined){
+	console.log("End input called. Number of fingers on screen is now:"+touchevt.touches.length);
+	if (touchevt.touches.length != 0){
+	    return false;
+	}
+    }
 };
 
 states.onPostInput = function(event,from,to){
@@ -101,9 +117,9 @@ states.onSendCapture = function(event,from,to){
     cb_canvas.ontouchmove = null;
 };
 
-states.onrun = function(event,from,to,player,canvas){
+states.onrun = function(event,from,to,prerollScreen,canvas,startButton){
     // for Mobile browsers, user intervention is needed to trigger loading
-    player.style.display = "block";
+/*    player.style.display = "block";
     player.addEventListener('canplaythrough',function(){
 	canvas.style.display = "none";
 	player.style.display = "block";
@@ -113,7 +129,15 @@ states.onrun = function(event,from,to,player,canvas){
 	player.style.display = "none";
 	canvas.style.display = "block";
 	states.startCapture();
-    });			    
+    });	
+*/
+    startButton.addEventListener('click',function(e){
+	e.preventDefault();
+	states.startCapture();
+	prerollScreen.style.display = "none";
+	return false;
+    });
+    
 }
 
 states.onstartWaiting = function(event,from,to,gesture){
@@ -128,6 +152,7 @@ states.onstartWaiting = function(event,from,to,gesture){
 };
 
 states.onPrepareForCapture = function(){
+    var canvas = document.getElementById("gestureCapture");
     setupGestureCapture(document.getElementById("gestureCapture"));
     var g = getNextGesture();
     //drawFingerSprite(cb_ctx,0,0);
@@ -143,7 +168,7 @@ window.addEventListener('load', function(){
     var config = getConfig();
     playAudioCue = AudioPlayer(config.cuePlayer);
     fingerSprite = config.fingerSprite;
-    states.run(config.introVideo,config.canvas);
+    states.run(config.prerollScreen,config.canvas,config.startButton);
     //states.startCapture();
 },false);
 
@@ -159,15 +184,14 @@ InitialiseCapture phase!
 */
 function setupGestureCapture(elem){
     setupGrowingCanvas(elem,window);
+    elem.style.display = "block";
     var context = elem.getContext('2d');
     cb_canvas = elem;
     cb_ctx = context;
     clearScreen(cb_canvas,cb_ctx,bgColour);
     cb_lastPoints = Array();
     context.lineWidth = 2;
-    //context.strokStyle = "rgb(239,242,177)";
     context.strokeStyle = penColour;
-    //cb_canvas = context;
     context.beginPath();
     
     // For debugging on computer
@@ -200,10 +224,6 @@ function setupGrowingCanvas(canvas,container){
     }
 }
 
-//function drawFingerSprite(sprite,context,x,y){
-//    context.drawImage(sprite.data,x-fingerSprite.centreX,y-fingerSprite.centreY);
-//}
-
 function drawFingers(context,touches){
     for (var touch in touches){
 	var curr = touches[touch];
@@ -212,19 +232,17 @@ function drawFingers(context,touches){
 }
 
 function startDraw(e) {
-	if (e.touches) {
-		// Touch event
-	    e.preventDefault();
-		for (var i = 1; i <= e.touches.length; i++) {
-			cb_lastPoints[i] = getCoords(e.touches[i - 1]); // Get info for finger #1
-		}
-	}
-	else {
-		// Mouse event
-		cb_lastPoints[0] = getCoords(e);
-		cb_canvas.onmousemove = drawMouse;
-	}
-    states.beginInput();	
+    if (e.touches) {
+	// Touch event
+	e.preventDefault();
+    }
+    else {
+	// Mouse event
+	cb_canvas.onmousemove = drawMouse;
+    }
+    if (states.can('beginInput')){
+	states.beginInput();	
+    }
     return false;
 }
 
@@ -232,34 +250,12 @@ function startDraw(e) {
 function stopDraw(e) {
     e.preventDefault();
     cb_canvas.onmousemove = null;
-    states.endInput();
+    states.endInput(e);
 }
 
 function drawMouse(e) {
-	if (e.touches) {
-		// Touch Enabled
-		for (var i = 1; i <= e.touches.length; i++) {
-			var p = getCoords(e.touches[i - 1]); // Get info for finger i
-			cb_lastPoints[i] = drawLine(cb_lastPoints[i].x, cb_lastPoints[i].y, p.x, p.y);
-		}
-	}
-	else {
-		// Not touch enabled
-		var p = getCoords(e);
-		cb_lastPoints[0] = drawLine(cb_lastPoints[0].x, cb_lastPoints[0].y, p.x, p.y);
-	}
-	cb_ctx.stroke();
-	cb_ctx.closePath();
-	cb_ctx.beginPath();
 	states.moreInput(e);
 	return false;
-}
-
-// Draw a line on the canvas from (s)tart to (e)nd
-function drawLine(sX, sY, eX, eY) {
-	cb_ctx.moveTo(sX, sY);
-	cb_ctx.lineTo(eX, eY);
-	return { x: eX, y: eY };
 }
 
 // Get the coordinates for a mouse or touch event

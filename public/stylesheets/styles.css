@@ -1,8 +1,18 @@
+@font-face
+{
+    font-family: Blurmix;
+    src: url('/public/assets/Blurmix.TTF');
+}
+
 body {
     margin: 0;
     padding: 0;
     overflow:hidden;
     background-color:black;
+    font-family:Blurmix, sans-serif;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
 
 #gestureCapture {
@@ -24,4 +34,32 @@ body {
   height: 30%;
   left: 20%;
   top: 35%;*/
+}
+
+#preroll {
+    position:relative;
+    /*width:1200px;
+    height:800px;*/
+    padding-top:5%;
+   /* vertical-align:middle;*/
+}
+
+#preroll p {
+    text-transform: uppercase;
+    color:white;
+    text-align:center;
+    font-size:35px;
+}
+
+#preroll p.appTitle {
+    font-size:50px;
+}
+
+
+#preroll .buttons {
+/*    position:absolute;
+    top:70%;
+    left:20%;
+*/
+    text-align:center;
 }

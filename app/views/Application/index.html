@@ -7,13 +7,24 @@
        var sprite = document.getElementById("glow");
        return {
           "canvas":document.getElementById("gestureCapture"),
-          "introVideo":document.getElementById("introVideo"),
+          //"introVideo":document.getElementById("introVideo"),
           "cuePlayer":document.getElementById("audioCuePlayer"),
           "fingerSprite":{data:sprite,
                           centreX:sprite.width/2,
-                          centreY:sprite.height/2}
+                          centreY:sprite.height/2},
+          "prerollScreen":document.getElementById("preroll"),
+          "startButton":document.getElementById("startButton")
        };
     }
+
+    function preventNativeGestures(elem){
+    elem.addEventListener('touchstart',function(e){e.preventDefault();});
+    elem.addEventListener('touchend',function(e){e.preventDefault();});
+    }
+    window.addEventListener('load',function(){
+    // This causes touch-enabled browsers to not fire clicks.
+    //preventNativeGestures(document.body);
+    });
   </script>
   <script type="text/javascript" src="public/javascripts/state-machine.js"></script>
   <script type="text/javascript" src="public/javascripts/gestures.js"></script>
@@ -25,10 +36,18 @@
 </head>
 <body>
 <img src="public/images/glow.png" id="glow" style="display:none">
+<div id="preroll">
+  <p class="appTitle"> Interface Design Machine 2.0</p>
+  <p> Designed By Ben Jarrett</p>
+  <p> Coded By Noel Zeng</p>
+  <div class="buttons">
+    <a href="#" id="startButton"><img src="public/images/start.png" id="start"></a>
+  </div>
+</div>
 <canvas id="gestureCapture" width="400" height="500" style="display:none">
   <strong> Your browser isn't new enough to support gesture capturing. Please upgrade your operating system and/or browser. </strong>
 </canvas>
 <audio id="audioCuePlayer"></audio>
-<video id="introVideo" src="public/assets/intro.mp4" width="640" height="480" style="display:none"></video>
+<!--<video id="introVideo" src="public/assets/intro.mp4" width="640" height="480" style="display:none"></video>-->
 </body>
 </html>
