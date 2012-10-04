@@ -51,11 +51,14 @@ function TouchArray(touchevt){
     if (touchevt.touches != undefined && touchevt.touches != null){
 	for (var i = 0;i < touchevt.touches.length;i++){
 	    var touchCoords = getCoords(touchevt.touches[i]);
-	    touchesArray[touchevt.touches[i].identifier] = touchCoords;
+	    // Gson does not allow getting keys, so making it a list of objects.
+	    touchesArray.push({"id":touchevt.touches[i].identifier,"coords":touchCoords});
+	    //touchesArray[touchevt.touches[i].identifier] = touchCoords;
 	}
 	return touchesArray;
     } else {
-	touchesArray[0] = getCoords(touchevt);
+	//touchesArray[0] = getCoords(touchevt);
+	touchesArray.push({"id":0,"coords":getCoords(touchevt)});
 	return touchesArray;
     }
 }
@@ -107,14 +110,31 @@ states.onPostInput = function(event,from,to){
     }
 };
 
-states.onSendCapture = function(event,from,to){
+function cancelGestureListeners(canvas){
     //Nullify all event handlers to prevent more input.
-    cb_canvas.onmousedown = null;
-    cb_canvas.onmouseup = null;
+    canvas.onmousedown = null;
+    canvas.onmouseup = null;
+    canvas.ontouchstart = null;
+    canvas.ontouchstop = null;
+    canvas.ontouchmove = null;
+}
 
-    cb_canvas.ontouchstart = null;
-    cb_canvas.ontouchstop = null;
-    cb_canvas.ontouchmove = null;
+states.onSendCapture = function(event,from,to){
+    cancelGestureListeners(cb_canvas);
+    var capturedArr = {};
+    console.log(capturedArr);
+    for (idx in gestures) {
+	capturedArr[gestures[idx].name] = gestures[idx].captured;
+    }
+    console.log(capturedArr);
+    //var stringifiedData = JSON.stringify(capturedArr);
+    // Naming convention for Play to bind to ScreenResolution.
+    var data = {"screen.x": window.innerWidth, 
+			 "screen.y": window.innerHeight,
+			 "captured":JSON.stringify(capturedArr)};
+    $.post("/submit",data,function(data){
+	//alert(data);
+    });
 };
 
 states.onrun = function(event,from,to,prerollScreen,canvas,startButton){
@@ -133,8 +153,9 @@ states.onrun = function(event,from,to,prerollScreen,canvas,startButton){
 */
     startButton.addEventListener('click',function(e){
 	e.preventDefault();
-	states.startCapture();
+	canvas.style.display = "block";
 	prerollScreen.style.display = "none";
+	states.startCapture();
 	return false;
     });
     
@@ -143,7 +164,7 @@ states.onrun = function(event,from,to,prerollScreen,canvas,startButton){
 states.onstartWaiting = function(event,from,to,gesture){
     gesture.captured = new Array();
     //gesture.captured.desc = gesture.desc;
-    gesture.captured.name = gesture.name;
+    //gesture.captured.name = gesture.name;
     if (gesture.desc != undefined && gesture.desc != null){
 	drawStatusText(gesture.desc,cb_ctx);
     }
@@ -152,6 +173,7 @@ states.onstartWaiting = function(event,from,to,gesture){
 };
 
 states.onPrepareForCapture = function(){
+    //alert("fired!");
     var canvas = document.getElementById("gestureCapture");
     setupGestureCapture(document.getElementById("gestureCapture"));
     var g = getNextGesture();
@@ -227,7 +249,7 @@ function setupGrowingCanvas(canvas,container){
 function drawFingers(context,touches){
     for (var touch in touches){
 	var curr = touches[touch];
-	context.drawImage(fingerSprite.data,curr.x-fingerSprite.centreX,curr.y-fingerSprite.centreY);
+	context.drawImage(fingerSprite.data,curr.coords.x-fingerSprite.centreX,curr.coords.y-fingerSprite.centreY);
     }
 }
 
@@ -269,4 +291,71 @@ function getCoords(e) {
 	else {
 		return { x: e.pageX - cb_canvas.offsetLeft, y: e.pageY - cb_canvas.offsetTop };
 	}
+}
+
+//states.onSendCapture = function(event,from,to){
+//    alert("hello");
+//    var capturedArr = new Array();
+//    for (idx in gestures){
+	//	alert(gestures[idx]);
+//	capturedArr.push(gestures[idx].captured);
+//    }
+//    var stringifiedData = JSON.stringify(capturedArr);
+    //DownloadJSON2CSV(capturedArr);
+//    alert(csvForGesture(capturedArr[0]));
+//    var csv = csvForGestures(capturedArr);
+    //line = line.slice(0,line.length-1); 	
+    //var str += line + '\r\n';
+//    window.open( "data:text/csv;charset=utf-8," + escape(csv))
+//}
+
+function csvForGesture(capturedGesture){
+    var csv = "";
+    csv += capturedGesture.name + ", \r\n";
+    //alert(csv);
+    for (idx in capturedGesture){
+	if (capturedGesture[idx].time != undefined && capturedGesture[idx].touches != undefined){
+	    csv += capturedGesture[idx].time + ",";
+	 //   console.log("Idx is "+idx+", csv is now "+csv);
+	    for (touchIdx in capturedGesture[idx].touches){
+		var currPoint = capturedGesture[idx].touches[touchIdx];
+		csv += "["+ currPoint.x + ","+ currPoint.y + "]" + ",";
+	    }
+	    csv += "\r\n";
+	}
+    }
+    return csv;
+}
+
+function csvForGestures(gestures){
+    var csv = "";
+    for (idx in gestures){
+	csv += csvForGesture(gestures[idx])
+    }
+    return csv;
+}
+
+function DownloadJSON2CSV(objArray)
+{
+    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+    
+    var str = '';
+    
+    for (var i = 0; i < array.length; i++) {
+        var line = '';
+	
+        for (var index in array[i]) {
+            line += array[i][index] + ',';
+        }
+	
+        // Here is an example where you would wrap the values in double quotes
+        // for (var index in array[i]) {
+        //    line += '"' + array[i][index] + '",';
+        // }
+	
+        line.slice(0,line.Length-1); 
+	
+        str += line + '\r\n';
+    }
+    window.open( "data:text/csv;charset=utf-8," + escape(str))
 }
