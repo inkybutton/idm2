@@ -4,13 +4,12 @@ import play.db.jpa.Model;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import java.awt.*;
 
 /**
  * User: Noel Zeng.
  * Part of models.
  * A Touch is a coordinate on a screen made by a user.
- * It contains the identifier of the device that touched the screen,
+ * It contains the identifier of the finger that touched the screen,
  * as well as a coordinate.
  * A Touch is associated with a particular captured gesture, as the
  * device identifier is not unique across touches.
@@ -20,10 +19,12 @@ import java.awt.*;
  */
 @Entity
 public class Touch extends Model {
-    public Point coord;
+    //public Point coord;
+    public int x;
+    public int y;
     public String identifier;
     @ManyToOne
-    public CapturedGesture gesture;
+    public GestureInstant instant;
 
     public Touch(){
 

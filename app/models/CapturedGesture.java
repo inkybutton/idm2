@@ -4,7 +4,8 @@ import play.db.jpa.Model;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import java.util.HashMap;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 
 /**
  * User: Noel Zeng.
@@ -12,12 +13,13 @@ import java.util.HashMap;
  */
 @Entity
 public class CapturedGesture extends Model {
-
-    public HashMap<Long,Touches> touchesOverTime;
+    @OneToMany
+    @OrderColumn
+    public GestureInstant[] touchesOverTime;
     @ManyToOne
     public Action action;
 
-    public CapturedGesture(HashMap<Long, Touches> gesture,Action action){
+    public CapturedGesture(GestureInstant[] gesture,Action action){
         touchesOverTime = gesture;
         this.action = action;
     }

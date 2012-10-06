@@ -5,3 +5,22 @@
 #   email: bob@gmail.com
 #   password: secret
 #   fullname: Bob
+
+Action(play):
+	name: Play
+
+Action(pause):
+	name: Pause
+
+CaptureSession(one):
+	screenRes: laptop
+	
+
+ScreenResolution(laptop):
+	x: 1280
+	y: 800
+
+
+
+Touch(1):
+	

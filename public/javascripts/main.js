@@ -51,9 +51,7 @@ function TouchArray(touchevt){
     if (touchevt.touches != undefined && touchevt.touches != null){
 	for (var i = 0;i < touchevt.touches.length;i++){
 	    var touchCoords = getCoords(touchevt.touches[i]);
-	    // Gson does not allow getting keys, so making it a list of objects.
-	    touchesArray.push({"id":touchevt.touches[i].identifier,"coords":touchCoords});
-	    //touchesArray[touchevt.touches[i].identifier] = touchCoords;
+	    touchesArray.push({"fid":touchevt.touches[i].identifier,"coords":touchCoords});
 	}
 	return touchesArray;
     } else {
@@ -121,10 +119,11 @@ function cancelGestureListeners(canvas){
 
 states.onSendCapture = function(event,from,to){
     cancelGestureListeners(cb_canvas);
-    var capturedArr = {};
+    var capturedArr = new Array();
     console.log(capturedArr);
     for (idx in gestures) {
-	capturedArr[gestures[idx].name] = gestures[idx].captured;
+	capturedArr.push({"gid":gestures[idx].name,"captured":gestures[idx].captured});
+//	capturedArr[gestures[idx].name] = gestures[idx].captured;
     }
     console.log(capturedArr);
     //var stringifiedData = JSON.stringify(capturedArr);
@@ -154,6 +153,7 @@ states.onrun = function(event,from,to,prerollScreen,canvas,startButton){
     startButton.addEventListener('click',function(e){
 	e.preventDefault();
 	states.startCapture();
+	canvas.style.display = "block";
 	prerollScreen.style.display = "none";
 	return false;
     });
@@ -247,7 +247,7 @@ function setupGrowingCanvas(canvas,container){
 function drawFingers(context,touches){
     for (var touch in touches){
 	var curr = touches[touch];
-	context.drawImage(fingerSprite.data,curr.x-fingerSprite.centreX,curr.y-fingerSprite.centreY);
+	context.drawImage(fingerSprite.data,curr.coords.x-fingerSprite.centreX,curr.coords.y-fingerSprite.centreY);
     }
 }
 

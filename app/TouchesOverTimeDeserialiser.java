@@ -26,7 +26,7 @@ class TouchesOverTimeDeserialiser implements JsonDeserializer<HashMap<Long,Touch
            deserialiseTouches(o.get("touches").getAsJsonObject());
               //result.put(o.get("time").getAsLong())
        }
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return result;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     private Touch[] deserialiseTouches(JsonObject o){
