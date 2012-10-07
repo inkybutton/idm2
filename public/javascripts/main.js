@@ -56,7 +56,7 @@ function TouchArray(touchevt){
 	return touchesArray;
     } else {
 	//touchesArray[0] = getCoords(touchevt);
-	touchesArray.push({"id":0,"coords":getCoords(touchevt)});
+	touchesArray.push({"fid":0,"coords":getCoords(touchevt)});
 	return touchesArray;
     }
 }

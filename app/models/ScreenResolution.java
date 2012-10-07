@@ -1,7 +1,8 @@
 package models;
 
+import play.db.jpa.Model;
+
 import javax.persistence.Entity;
-import javax.persistence.Id;
 
 /**
  * User: Noel Zeng.
@@ -9,9 +10,8 @@ import javax.persistence.Id;
  */
 
 @Entity
-public class ScreenResolution {
-    @Id
-    private Long resolutionId;
+public class ScreenResolution extends Model {
+
     public int x;
     public int y;
     

@@ -17,7 +17,7 @@ public class Action extends Model {
         this.name = name;
     }
     
-    public Action getAction(String name){
+    public static Action getAction(String name){
         return Action.find("byName",name).first();
     }
 }
