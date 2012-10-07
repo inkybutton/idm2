@@ -132,6 +132,7 @@ states.onSendCapture = function(event,from,to){
     var data = {"screen.x": window.innerWidth, 
 			 "screen.y": window.innerHeight,
 			 "captured":JSON.stringify(capturedArr)};
+    console.log(data.captured);
     $.post("/submit",data,function(data){
 	//alert(data);
     });
@@ -185,9 +186,17 @@ states.onPrepareForCapture = function(){
     }
 }
 
+function setupAudioErrorListener(player){
+    player.addEventListener('error',function(e){
+	console.log("error with audio occurred");
+	console.log("error is "+player.error.code);
+    });
+}			   
+
 // Entry point
 window.addEventListener('load', function(){
     var config = getConfig();
+    setupAudioErrorListener(config.cuePlayer);
     playAudioCue = AudioPlayer(config.cuePlayer);
     fingerSprite = config.fingerSprite;
     states.run(config.prerollScreen,config.canvas,config.startButton);
