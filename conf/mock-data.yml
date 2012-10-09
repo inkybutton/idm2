@@ -1,0 +1,97 @@
+# you describe your data using the YAML notation here
+# and then load them using Fixtures.load("data.yml")
+
+# User(bob):
+#   email: bob@gmail.com
+#   password: secret
+#   fullname: Bob
+
+Action(play):
+    name: Play
+
+Action(pause):
+    name: Pause
+
+ScreenResolution(laptop):
+    x: 1280
+    y: 800
+
+CaptureSession(one):
+    screenRes: laptop
+    isDownloaded: false
+    gestures:
+                - first
+                - second
+
+CapturedGesture(first):
+    action: play
+    session: one
+    touchesOverTime:
+                    - 4
+                    - secondTouch
+
+GestureInstant(4):
+    timeElapsed: 400
+    gesture: first
+    touches:
+            - 1
+            - 2
+
+GestureInstant(secondTouch):
+    timeElapsed: 500
+    gesture: first
+    touches:
+            - 3
+            - fourth
+
+Touch(1):
+    x: 1000
+    y: 700
+    identifier: 0
+    instant: 4
+
+Touch(2):
+    x: 1000
+    y: 500
+    identifier: 1
+    instant: 4
+
+CapturedGesture(second):
+    action: pause
+    session: one
+    touchesOverTime:
+                    - instant3
+
+Touch(3):
+    x: 400
+    y: 230
+    identifier: 0
+    instant: secondTouch
+
+Touch(fourth):
+    x: 100
+    y: 309
+    identifier: 1
+    instant: secondTouch
+
+GestureInstant(instant3):
+    timeElapsed: 10
+    gesture: second
+    touches:
+            - touch5
+            - touch6
+
+Touch(touch5):
+    x: 429
+    y: 291
+    identifier: 23491
+    instant: instant3
+
+Touch(touch6):
+    x: 219
+    y: 384
+    identifier: 29203
+    instant: instant3
+
+
+

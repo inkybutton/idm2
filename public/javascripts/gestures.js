@@ -11,7 +11,7 @@ var gestures = [
     {name: "scrollforward", cues:[{type:"audio",data:"public/assets/cues/ScrollForward.wav"}]},
     {name: "stop", cues:[{type:"audio",data:"public/assets/cues/Stop.wav"}]},
     {name: "volumedown", cues:[{type:"audio",data:"public/assets/cues/VolumeDown.wav"}]},
-    {name: "stop", cues:[{type:"audio",data:"public/assets/cues/VolumeUp.wav"}]},
+    {name: "volumeup", cues:[{type:"audio",data:"public/assets/cues/VolumeUp.wav"}]},
 ];
 
 function createIterator(arrayToIterate){

@@ -1,0 +1,33 @@
+# Initial data - only actions.
+Action(play):
+    name: play
+
+Action(pause):
+    name: pause
+
+Action(play):
+    name: back
+
+Action(pause):
+    name: next
+
+Action(play):
+    name: poweroff
+
+Action(pause):
+    name: poweron
+
+Action(play):
+    name: scrollbackward
+
+Action(pause):
+    name: scrollforward
+
+Action(play):
+    name: stop
+
+Action(pause):
+    name: volumedown
+
+Action(play):
+    name: volumeup

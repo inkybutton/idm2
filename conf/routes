@@ -4,6 +4,14 @@
 
 # Home page
 GET     /                                       Application.index
+POST     /submit                                Application.submitData
+
+# Replace routes with others to hide gesture interface data, if you wish.
+
+GET     /new                                    Application.getNewCSV
+GET     /old                                    Application.getOldCSV
+GET     /all                                    Application.getAllCSV
+GET     /overview                                   Application.overview
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
