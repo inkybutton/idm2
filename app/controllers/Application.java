@@ -1,7 +1,7 @@
 package controllers;
 
+import models.CaptureSession;
 import models.CapturedGesture;
-import models.RecordRange;
 import models.ScreenResolution;
 import play.mvc.Controller;
 import utils.GestureListBinder;
@@ -18,20 +18,54 @@ public class Application extends Controller {
         GestureListBinder b = new GestureListBinder();
         try {
             List<CapturedGesture> gs = b.deserialise(captured);
-            for (CapturedGesture g:gs){
-                g.save();
-            }
-            renderArgs.put("data",gs.size());
+            CaptureSession thisSession = new CaptureSession(gs,screen);
+            thisSession.save();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        renderArgs.put("resWidth",screen.x);
-        renderArgs.put("resHeight",screen.y);
         render();
     }
 
-    public static void viewRange(RecordRange r){
+    public static void overview(){
+        renderArgs.put("numNew",CaptureSession.getNotDownloaded().size());
+        renderArgs.put("numOld",CaptureSession.getDownloaded().size());
+        render();
+    }
 
+    public static void getNewCSV(){
+        List<CaptureSession> sessions = CaptureSession.getNotDownloaded();
+        response.contentType = "text/csv";
+        for (CaptureSession s:sessions){
+            try {
+                response.writeChunk(s.downloadCSV().call());
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }       
+    }
+    
+    public static void getOldCSV(){
+        List<CaptureSession> sessions = CaptureSession.getDownloaded();
+        response.contentType = "text/csv";
+        for (CaptureSession s:sessions){
+            try {
+                response.writeChunk(s.downloadCSV().call());
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    public static void getAllCSV(){
+        List<CaptureSession> sessions = CaptureSession.all().fetch();
+        response.contentType = "text/csv";
+        for (CaptureSession s:sessions){
+            try {
+                response.writeChunk(s.downloadCSV().call());
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        } 
     }
 
 }

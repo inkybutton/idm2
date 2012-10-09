@@ -78,10 +78,10 @@ public class JsonDeserialisationTest extends UnitTest {
             JsonParser p = f.createJsonParser(json);
             GestureInstant i = b.deserialiseInstant(m.readTree(p),g);
             assertEquals(i.timeElapsed,3819);
-            HashMap<String,List<Touch>> r = i.getTouches();
+            HashMap<String,Touch> r = i.getHashedTouches();
             assertTrue(r.size() == 2);
-            Touch first = r.get("392").get(0);
-            Touch sec = r.get("405").get(0);
+            Touch first = r.get("392");
+            Touch sec = r.get("405");
             assertEquals(first.identifier,"392");
             assertTrue(first.x == 32);
             assertTrue(first.y == 99);

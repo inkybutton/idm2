@@ -18,10 +18,12 @@ public class RecordRange extends Model {
 
     public RecordRange(CaptureSession start,CaptureSession end){
         creationDate = new Date();
-
+        this.start = start;
+        this.end = end;
     }
 
     public List<CaptureSession> getRange(){
+
         return null;
     }
     

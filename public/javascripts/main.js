@@ -132,7 +132,7 @@ states.onSendCapture = function(event,from,to){
 			 "screen.y": window.innerHeight,
 			 "captured":JSON.stringify(capturedArr)};
     $.post("/submit",data,function(data){
-	alert(data);
+	//alert(data);
     });
 };
 
@@ -289,71 +289,4 @@ function getCoords(e) {
 	else {
 		return { x: e.pageX - cb_canvas.offsetLeft, y: e.pageY - cb_canvas.offsetTop };
 	}
-}
-
-//states.onSendCapture = function(event,from,to){
-//    alert("hello");
-//    var capturedArr = new Array();
-//    for (idx in gestures){
-	//	alert(gestures[idx]);
-//	capturedArr.push(gestures[idx].captured);
-//    }
-//    var stringifiedData = JSON.stringify(capturedArr);
-    //DownloadJSON2CSV(capturedArr);
-//    alert(csvForGesture(capturedArr[0]));
-//    var csv = csvForGestures(capturedArr);
-    //line = line.slice(0,line.length-1); 	
-    //var str += line + '\r\n';
-//    window.open( "data:text/csv;charset=utf-8," + escape(csv))
-//}
-
-function csvForGesture(capturedGesture){
-    var csv = "";
-    csv += capturedGesture.name + ", \r\n";
-    //alert(csv);
-    for (idx in capturedGesture){
-	if (capturedGesture[idx].time != undefined && capturedGesture[idx].touches != undefined){
-	    csv += capturedGesture[idx].time + ",";
-	 //   console.log("Idx is "+idx+", csv is now "+csv);
-	    for (touchIdx in capturedGesture[idx].touches){
-		var currPoint = capturedGesture[idx].touches[touchIdx];
-		csv += "["+ currPoint.x + ","+ currPoint.y + "]" + ",";
-	    }
-	    csv += "\r\n";
-	}
-    }
-    return csv;
-}
-
-function csvForGestures(gestures){
-    var csv = "";
-    for (idx in gestures){
-	csv += csvForGesture(gestures[idx])
-    }
-    return csv;
-}
-
-function DownloadJSON2CSV(objArray)
-{
-    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
-    
-    var str = '';
-    
-    for (var i = 0; i < array.length; i++) {
-        var line = '';
-	
-        for (var index in array[i]) {
-            line += array[i][index] + ',';
-        }
-	
-        // Here is an example where you would wrap the values in double quotes
-        // for (var index in array[i]) {
-        //    line += '"' + array[i][index] + '",';
-        // }
-	
-        line.slice(0,line.Length-1); 
-	
-        str += line + '\r\n';
-    }
-    window.open( "data:text/csv;charset=utf-8," + escape(str))
 }

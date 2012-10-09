@@ -24,7 +24,7 @@ public class GestureListBinder implements TypeBinder<List<CapturedGesture>> {
 
     @Override
     public Object bind(String name, Annotation[] annotations, String value, Class actualClass, Type genericType) throws Exception {
-        // Will use Jackson's Tree Model.
+        // Will use Jackson's Tree model.
         return deserialise(value);
     }
     
@@ -47,11 +47,7 @@ public class GestureListBinder implements TypeBinder<List<CapturedGesture>> {
     public CapturedGesture deserialiseGesture(JsonNode n){
         //System.out.println("Gesture called!");
         String actionName = n.get("gid").asText();
-        Action a = Action.getAction(actionName);
-         if (a == null){
-            a = new Action(actionName);
-            a.save();
-         }
+        Action a = Action.getOrCreate(actionName);
         CapturedGesture g = new CapturedGesture(a);
         List<GestureInstant> instants = deserialiseInstants(n.get("captured"),g);
         g.touchesOverTime = instants;

@@ -34,7 +34,7 @@ public class CSVConversionTest extends UnitTest {
         CapturedGesture g = createGesture();
         List<CapturedGesture> l = new ArrayList<CapturedGesture>();
         l.add(g);
-        t = g.touchesOverTime.get(0).getTouches().get("392").get(0);
+        t = g.touchesOverTime.get(0).getHashedTouches().get("392");
         CaptureSession s = new CaptureSession(l,new ScreenResolution(1920,800));
         g.session = s;
         s.save();
@@ -49,6 +49,24 @@ public class CSVConversionTest extends UnitTest {
     @Test
     public void csvTouchFragmentTest(){
         assertTrue(t.toCSVFragment().equals("392,32,99"));
+    }
+
+    @Test
+    public void sessionCSVDownloadTest(){
+        try {
+            String csv = "";
+            List<CaptureSession> ss = CaptureSession.getDownloaded();
+            for (CaptureSession s:ss){
+                String currentSessionCSV =  s.downloadCSV().call();
+                assertTrue(s.isDownloaded == true);
+                assertTrue(csv.contains(s.screenRes.x + ","+s.screenRes.y));
+                csv += currentSessionCSV;
+            }
+        } catch (Exception e){
+            fail();
+        }
+        //assertTrue(csv.contains("405,39,51"));
+        
     }
     
     private CapturedGesture createGesture(){

@@ -2,23 +2,24 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bf0d3384-134a-4dcf-8e5d-ed689482e982" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/utils/GestureListBinder.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/CSVConversionTest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/JsonDeserialisationTest.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/CapturedGestureArrayBinder.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/TouchesOverTimeDeserialiser.java" afterPath="" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/MocksBootstrap.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/views/Application/overview.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/conf/data.yml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/data.yml" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/Application.java" afterPath="$PROJECT_DIR$/app/controllers/Application.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/Action.java" afterPath="$PROJECT_DIR$/app/models/Action.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/CaptureSession.java" afterPath="$PROJECT_DIR$/app/models/CaptureSession.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/CapturedGesture.java" afterPath="$PROJECT_DIR$/app/models/CapturedGesture.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/GestureInstant.java" afterPath="$PROJECT_DIR$/app/models/GestureInstant.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/RecordRange.java" afterPath="$PROJECT_DIR$/app/models/RecordRange.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/ScreenResolution.java" afterPath="$PROJECT_DIR$/app/models/ScreenResolution.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/Touch.java" afterPath="$PROJECT_DIR$/app/models/Touch.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/conf/dependencies.yml" afterPath="$PROJECT_DIR$/conf/dependencies.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/utils/GestureListBinder.java" afterPath="$PROJECT_DIR$/app/utils/GestureListBinder.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/Application/submitData.html" afterPath="$PROJECT_DIR$/app/views/Application/submitData.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/conf/routes" afterPath="$PROJECT_DIR$/conf/routes" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/idm2.ipr" afterPath="$PROJECT_DIR$/idm2.ipr" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/idm2.iws" afterPath="$PROJECT_DIR$/idm2.iws" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/gestures.js" afterPath="$PROJECT_DIR$/public/javascripts/gestures.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/main.js" afterPath="$PROJECT_DIR$/public/javascripts/main.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/BasicTest.java" afterPath="$PROJECT_DIR$/test/BasicTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/CSVConversionTest.java" afterPath="$PROJECT_DIR$/test/CSVConversionTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/JsonDeserialisationTest.java" afterPath="$PROJECT_DIR$/test/JsonDeserialisationTest.java" />
     </list>
     <ignored path="idm2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -76,67 +77,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="CapturedGesture.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/models/CapturedGesture.java">
+      <file leaf-file-name="overview.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/views/Application/overview.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="34" selection-start="429" selection-end="429" vertical-scroll-proportion="0.0">
+            <state line="23" column="7" selection-start="889" selection-end="889" vertical-scroll-proportion="0.33333334">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GestureListBinder.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/utils/GestureListBinder.java">
+      <file leaf-file-name="styles.css" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/stylesheets/styles.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="87" column="35" selection-start="3014" selection-end="3014" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#1285#1302#0" expanded="true" />
-                <element signature="e#2072#2088#0" expanded="true" />
-                <element signature="e#2629#2636#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RecordRange.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/models/RecordRange.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="33" column="20" selection-start="691" selection-end="691" vertical-scroll-proportion="0.0">
+            <state line="0" column="0" selection-start="0" selection-end="84" vertical-scroll-proportion="0.0">
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ScreenResolution.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/models/ScreenResolution.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="43" selection-start="177" selection-end="177" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GestureInstant.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/models/GestureInstant.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="17" column="13" selection-start="333" selection-end="333" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CSVConversionTest.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test/CSVConversionTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="49" column="39" selection-start="1352" selection-end="1352" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#882#899#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -144,29 +98,61 @@
       <file leaf-file-name="Application.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/controllers/Application.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="13" selection-start="524" selection-end="524" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state line="17" column="41" selection-start="422" selection-end="422" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BasicTest.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test/BasicTest.java">
+      <file leaf-file-name="GestureListBinder.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/utils/GestureListBinder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="13" selection-start="64" selection-end="64" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state line="48" column="56" selection-start="1586" selection-end="1586" vertical-scroll-proportion="0.24743444">
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Touch.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="routes" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/conf/routes">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="13" column="17" selection-start="543" selection-end="543" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="data.yml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/conf/data.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="18" column="0" selection-start="221" selection-end="221" vertical-scroll-proportion="0.32">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GestureInstant.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/models/GestureInstant.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="20" column="21" selection-start="429" selection-end="429" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Touch.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/models/Touch.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="75" column="34" selection-start="3529" selection-end="3529" vertical-scroll-proportion="1.3276836">
+            <state line="75" column="34" selection-start="3529" selection-end="3529" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CaptureSession.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/models/CaptureSession.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="29" column="48" selection-start="807" selection-end="819" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -187,30 +173,30 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/app/ScreenResolutionBinder.java" />
-        <option value="$PROJECT_DIR$/app/models/Touches.java" />
-        <option value="$PROJECT_DIR$/app/TouchesOverTimeDeserialiser.java" />
-        <option value="$PROJECT_DIR$/test/BasicTest.java" />
-        <option value="$PROJECT_DIR$/app/models/GestureInstant.java" />
-        <option value="$PROJECT_DIR$/app/models/Action.java" />
-        <option value="$PROJECT_DIR$/test/JsonDeserialisationTest.java" />
-        <option value="$PROJECT_DIR$/app/models/RecordRange.java" />
-        <option value="$PROJECT_DIR$/app/CapturedGestureArrayBinder.java" />
-        <option value="$PROJECT_DIR$/app/utils/GestureListBinder.java" />
-        <option value="$PROJECT_DIR$/app/controllers/Application.java" />
-        <option value="$PROJECT_DIR$/app/models/ScreenResolution.java" />
-        <option value="$PROJECT_DIR$/app/models/CaptureSession.java" />
-        <option value="$PROJECT_DIR$/app/models/CapturedGesture.java" />
-        <option value="$PROJECT_DIR$/test/CSVConversionTest.java" />
         <option value="$PROJECT_DIR$/app/models/Touch.java" />
+        <option value="$PROJECT_DIR$/test/JsonDeserialisationTest.java" />
+        <option value="$PROJECT_DIR$/app/views/Application/submitData.html" />
+        <option value="$PROJECT_DIR$/app/models/RecordRange.java" />
+        <option value="$PROJECT_DIR$/app/models/GestureInstant.java" />
+        <option value="$PROJECT_DIR$/app/views/Application/viewGestures.html" />
+        <option value="$PROJECT_DIR$/test/CSVConversionTest.java" />
+        <option value="$PROJECT_DIR$/test/data.yml" />
+        <option value="$PROJECT_DIR$/app/MocksBootstrap.java" />
+        <option value="$PROJECT_DIR$/app/models/CaptureSession.java" />
+        <option value="$PROJECT_DIR$/conf/data.yml" />
+        <option value="$PROJECT_DIR$/conf/routes" />
+        <option value="$PROJECT_DIR$/app/controllers/Application.java" />
+        <option value="$PROJECT_DIR$/app/views/Application/overview.html" />
+        <option value="$PROJECT_DIR$/app/utils/GestureListBinder.java" />
+        <option value="$PROJECT_DIR$/app/models/Action.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-1" />
     <option name="y" value="27" />
-    <option name="width" value="1368" />
-    <option name="height" value="742" />
+    <option name="width" value="1922" />
+    <option name="height" value="1054" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -238,7 +224,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -281,6 +266,52 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="public" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="stylesheets" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="idm2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="working" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="public" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="idm2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="working" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="conf" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="idm2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="working" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -299,7 +330,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="utils" />
+              <option name="myItemId" value="views" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -317,30 +348,17 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="models" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="idm2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="working" />
+              <option name="myItemId" value="views" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="controllers" />
+              <option name="myItemId" value="Application" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -496,12 +514,12 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="27" width="1368" height="742" extended-state="6" />
+    <frame x="-1" y="27" width="1922" height="1054" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32890365" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3282313" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -511,7 +529,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21699545" sideWeight="0.6710963" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15331197" sideWeight="0.6717687" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -570,132 +588,119 @@
   <component name="XDebuggerManager">
     <breakpoint-manager />
   </component>
+  <component name="antWorkspaceConfiguration">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="FILTER_TARGETS" value="false" />
+  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/conf/messages">
+    <entry file="file://$PROJECT_DIR$/app/models/ScreenResolution.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="14" column="17" selection-start="198" selection-end="198" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/Action.java">
+    <entry file="file://$PROJECT_DIR$/test/CSVConversionTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="49" selection-start="399" selection-end="399" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/conf/routes">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="0" selection-start="539" selection-end="539" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/Application.test.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.33333334">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/ApplicationTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="13" selection-start="114" selection-end="114" vertical-scroll-proportion="0.0">
+        <state line="58" column="38" selection-start="1621" selection-end="1621" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test/JsonDeserialisationTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="46" column="14" selection-start="1388" selection-end="1388" vertical-scroll-proportion="0.80607474">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/Application.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="13" selection-start="524" selection-end="524" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/CaptureSession.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="29" selection-start="692" selection-end="692" vertical-scroll-proportion="0.3249715">
+        <state line="94" column="5" selection-start="3279" selection-end="3279" vertical-scroll-proportion="0.0">
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/ScreenResolution.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="43" selection-start="177" selection-end="177" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/RecordRange.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="20" selection-start="691" selection-end="691" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/GestureInstant.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="13" selection-start="333" selection-end="333" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/utils/GestureListBinder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="87" column="35" selection-start="3014" selection-end="3014" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#1285#1302#0" expanded="true" />
-            <element signature="e#2072#2088#0" expanded="true" />
-            <element signature="e#2629#2636#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/models/CapturedGesture.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="34" selection-start="429" selection-end="429" vertical-scroll-proportion="0.0">
+        <state line="23" column="37" selection-start="577" selection-end="577" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/BasicTest.java">
+    <entry file="file://$PROJECT_DIR$/app/MocksBootstrap.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="13" selection-start="64" selection-end="64" vertical-scroll-proportion="0.0">
+        <state line="18" column="0" selection-start="347" selection-end="347" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/CSVConversionTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="39" selection-start="1352" selection-end="1352" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#882#899#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/models/Touch.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="75" column="34" selection-start="3529" selection-end="3529" vertical-scroll-proportion="1.3276836">
+        <state line="75" column="34" selection-start="3529" selection-end="3529" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models/GestureInstant.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="21" selection-start="429" selection-end="429" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/conf/data.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="0" selection-start="221" selection-end="221" vertical-scroll-proportion="0.32">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models/CaptureSession.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="48" selection-start="807" selection-end="819" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/conf/routes">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="17" selection-start="543" selection-end="543" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/stylesheets/main.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/Application/overview.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="7" selection-start="889" selection-end="889" vertical-scroll-proportion="0.33333334">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/stylesheets/styles.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="84" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/Application.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="41" selection-start="422" selection-end="422" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models/Action.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="35" selection-start="168" selection-end="168" vertical-scroll-proportion="0.15393387">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/utils/GestureListBinder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="48" column="56" selection-start="1586" selection-end="1586" vertical-scroll-proportion="0.24743444">
           <folding />
         </state>
       </provider>
@@ -757,6 +762,7 @@
             <option name="proportions">
               <list>
                 <option value="0.2" />
+                <option value="0.5" />
               </list>
             </option>
           </splitter-proportions>

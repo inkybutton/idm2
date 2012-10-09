@@ -10,14 +10,17 @@ import javax.persistence.Entity;
  */
 @Entity
 public class Action extends Model {
-    //@Id
-    //private Long actionId;
     public String name;
     public Action(String name){
         this.name = name;
     }
-    
-    public static Action getAction(String name){
-        return Action.find("byName",name).first();
+
+    public static Action getOrCreate(String name){
+        Action a = Action.find("byName",name).first();
+        if (a == null){
+            a = new Action(name);
+            a.save();
+        }
+        return a;
     }
 }

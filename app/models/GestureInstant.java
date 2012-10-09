@@ -35,14 +35,10 @@ public class GestureInstant extends Model {
         return this;
     }
 
-    public HashMap<String,List<Touch>> getTouches(){
-        HashMap<String,List<Touch>> h = new HashMap<String, List<Touch>>();
+    public HashMap<String,Touch> getHashedTouches(){
+        HashMap<String,Touch> h = new HashMap<String, Touch>();
         for (Touch t:touches){
-            if (h.get(t.identifier) == null){
-                h.put(t.identifier,new ArrayList<Touch>(5));
-            }
-            List<Touch> l = h.get(t.identifier);
-            l.add(t);
+            h.put(t.identifier,t);
         }
         return h;
     }
