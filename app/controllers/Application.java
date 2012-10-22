@@ -3,14 +3,54 @@ package controllers;
 import models.CaptureSession;
 import models.CapturedGesture;
 import models.ScreenResolution;
+import play.libs.MimeTypes;
 import play.mvc.Controller;
+import play.mvc.Http;
+import play.vfs.VirtualFile;
 import utils.GestureListBinder;
+import utils.PartialContent;
 
+import java.io.File;
+import java.io.InputStream;
 import java.util.List;
 
 public class Application extends Controller {
 
     public static void index() {
+        render();
+    }
+
+
+    /**
+     * Allows an asset file to be shared partially.
+     * Code derived from https://gist.github.com/1781977.
+     * @param fileName - A path relative to the /public directory.
+     */
+
+    public static void cues(String fileName){
+        response.setHeader("Accept-Ranges", "bytes");
+        VirtualFile f = VirtualFile.fromRelativePath("/public/assets/cues/"+fileName);
+        if (!f.exists()){
+            notFound();
+        }
+        InputStream underlyingFile = f.inputstream();
+        File realFile = f.getRealFile();
+        //String fileName = ...//name of the file
+
+        Http.Header rangeHeader = request.headers.get("range");
+        if (rangeHeader != null) {
+            throw new PartialContent(realFile, fileName);
+        } else {
+
+            renderBinary(underlyingFile,
+                    fileName, realFile.length(),
+                    MimeTypes.getContentType(fileName), false);
+        }
+
+
+    }
+
+    public static void iostest(){
         render();
     }
 

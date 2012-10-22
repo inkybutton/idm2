@@ -5,7 +5,7 @@
 # Home page
 GET     /                                       Application.index
 POST     /submit                                Application.submitData
-
+GET     /cues/{fileName}                        Application.cues
 # Replace routes with others to hide gesture interface data, if you wish.
 
 GET     /new                                    Application.getNewCSV

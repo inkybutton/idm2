@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>The HTML5 File</title>
+  <meta name="description" content="The HTML5 File">
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+</head>
+<body>
+<!--<audio id="wavmusic" src="/public/assets/cues/Play.wav" controls>-->
+<!--<audio id="m4amusic" src="/public/assets/cues/Play.m4a" controls>-->
+<h2> 1. Format Test. Turns out only mp3 works.</h2>
+<p><audio id="mp3music" src="/public/assets/test/Next.mp3" controls></audio></p>
+<p><audio id="mp3music2" src="/public/assets/test/Play.mp3" type="audio/mp3" controls loop></audio></p>
+<p>Using local file with partial content: <audio id="localwav" src='@@{Application.cues("Play.wav")}' controls></audio></p>
+<p>Using local file with partial content, 2: <audio id="localwav2" src='@@{Application.cues("ScrollBackward.wav")}' controls></audio></p>
+<p>An external M4A: <audio id="m4aaudio" src="http://dl.dropbox.com/u/1538714/article_resources/cat.m4a" type="audio/mpeg" controls></audio></p>
+<p>A local M4a: <audio id="m4aaudio" src="http://192.168.1.3:9000/public/assets/test/cat.m4a" type="audio/mpeg" controls></audio></p>
+
+<h2> 2. Trigger test.</h2>
+<p><a href="#" onclick="play(document.getElementById('mp3music'))"> Click to play. </a></p>
+<p><a href="#" onclick="var origPlayer = document.getElementById('mp3music');playChangeAndPlay(origPlayer);"> Click to play, and then change src, and then play. </a></p>
+<p><a href="#" onclick="init(document.getElementById('mp3music'));loopAudio(document.getElementById('mp3music'));">Apple's loop solution on MP3.</a></p>
+<p><a href="#" onclick="init(document.getElementById('m4aaudio'));loopAudio(document.getElementById('m4aaudio'));">Apple's loop solution on M4a.</a></p>
+
+<p><a href="#" onclick="var origPlayer = document.getElementById('m4aaudio');playChangeAndPlay(origPlayer);">External audio play & change src and play</a></p>
+<p><a href="#" onclick="var origPlayer = document.getElementById('m4aaudio');swap(origPlayer,'http://dl.dropbox.com/u/1538714/article_resources/song.m4a');">External audio play & change src to external</a></p>
+<h2>3. With Partial Content </h2>
+<p><a href="#" onclick="var origPlayer = document.getElementById('localwav');swap(origPlayer,'@@{Application.cues("Back.wav")}');"> Click to play, and then change src, and then play. </a></p>
+<p><a href="#" onclick="playThenLoad(document.getElementById('localwav'),document.getElementById('localwav2'));">Play Then Load.</a></p>
+<p><a href="#" onclick="loadAndPlay(document.getElementById('localwav'),document.getElementById('localwav2'));">Load and Play.</a></p>
+
+<h2>4. Delayed Play</h2>
+<p><a href="#" onclick="delayPlay(document.getElementById('localwav2'));">Load, then play 5 seconds later.</a></p>
+  <script type="text/javascript">
+
+    function delayPlay(player){
+        player.load();
+        setTimeout(function(){player.play()},5000);
+    }
+    
+    function playThenLoad(firstSound,secondSound){
+         firstSound.addEventListener('ended',function(e){
+               firstSound.src = '@@{Application.cues("Back.wav")}';
+               setTimeout(function(){firstSound.play();},100);
+               firstSound.removeEventListener("ended",this);
+         });
+         firstSound.play();
+    }
+
+    function loadAndPlay(firstSound,secondSound){
+         firstSound.load();
+         secondSound.load();
+         firstSound.addEventListener('ended',function(e){
+               secondSound.play();
+         });
+         setTimeout(function(){firstSound.play();},100);
+    }
+    function play(elem){
+       elem.play();
+    }
+
+    function changeAndPlay(elem,newAudio){
+       elem.src = newAudio;
+       play(elem);
+    }
+
+    function playChangeAndPlay(elem,newAudio){
+    var player = elem;
+    player.addEventListener('ended',function(){
+       console.log("Ended cb was called.");
+       player.src = '/public/assets/test/Play.mp3';
+       player.addEventListener('ended',function(){
+          console.log("Second cb was called.");
+       });
+    player.play()
+    },false);
+    play(player);
+    }
+
+    function swap(elem,newAudio){
+    var player = elem;
+    player.addEventListener('ended',function(){
+       console.log("Ended cb was called.");
+       player.src = newAudio;
+       player.addEventListener('ended',function(){
+          console.log("Second cb was called.");
+       });
+    player.play()
+    },false);
+    play(player);
+    }
+
+//Apple's own documented looper:
+        function init(elem) {
+
+            var myAudio = elem;
+
+            myAudio.addEventListener('ended', function(){loopAudio(elem);}, false);
+
+        }
+
+        function loopAudio(elem) {
+
+            var myAudio = elem;
+
+            myAudio.play();
+
+        }
+
+    function setUp(elem){
+       elem.addEventListener('error',function(e){
+    console.log(e.code);
+    });
+    }
+
+    setUp(document.getElementById('mp3music'));
+
+  </script>
+</body>
+</html>
