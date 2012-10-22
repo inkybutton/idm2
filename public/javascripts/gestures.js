@@ -1,17 +1,17 @@
 // Gestures that need to be captured.
 
 var gestures = [
-    {name: "play", cues:[{type:"audio",data:"public/assets/cues/Play.wav"}]},
-    {name: "pause", cues:[{type:"audio",data:"public/assets/cues/Pause.wav"}]},
-    {name: "back", cues:[{type:"audio",data:"public/assets/cues/Back.wav"}]},
-    {name: "next", cues:[{type:"audio",data:"public/assets/cues/Next.wav"}]},
-    {name: "poweroff", cues:[{type:"audio",data:"public/assets/cues/PowerOff.wav"}]},
-    {name: "poweron", cues:[{type:"audio",data:"public/assets/cues/PowerOn.wav"}]},
-    {name: "scrollbackward", cues:[{type:"audio",data:"public/assets/cues/ScrollBackward.wav"}]},
-    {name: "scrollforward", cues:[{type:"audio",data:"public/assets/cues/ScrollForward.wav"}]},
-    {name: "stop", cues:[{type:"audio",data:"public/assets/cues/Stop.wav"}]},
-    {name: "volumedown", cues:[{type:"audio",data:"public/assets/cues/VolumeDown.wav"}]},
-    {name: "volumeup", cues:[{type:"audio",data:"public/assets/cues/VolumeUp.wav"}]},
+    {name: "play", cues:[{type:"audio",data:"cues/Play.m4a"}]},
+    {name: "pause", cues:[{type:"audio",data:"cues/Pause.m4a"}]},
+    {name: "back", cues:[{type:"audio",data:"cues/Back.m4a"}]},
+    {name: "next", cues:[{type:"audio",data:"cues/Next.m4a"}]},
+    {name: "poweroff", cues:[{type:"audio",data:"cues/PowerOff.m4a"}]},
+    {name: "poweron", cues:[{type:"audio",data:"cues/PowerOn.m4a"}]},
+    {name: "scrollbackward", cues:[{type:"audio",data:"cues/ScrollBackward.m4a"}]},
+    {name: "scrollforward", cues:[{type:"audio",data:"cues/ScrollForward.m4a"}]},
+    {name: "stop", cues:[{type:"audio",data:"cues/Stop.m4a"}]},
+    {name: "volumedown", cues:[{type:"audio",data:"cues/VolumeDown.m4a"}]},
+    {name: "volumeup", cues:[{type:"audio",data:"cues/VolumeUp.m4a"}]},
 ];
 
 function createIterator(arrayToIterate){

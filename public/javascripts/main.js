@@ -18,7 +18,10 @@ function AudioPlayer(elem){
     //console.debug(elem);
     return function(url){
 	elem.src = url;
-	elem.play();
+	elem.load();
+	setTimeout( //Another call necessary for iOS to load files smoothly?
+	    function(){
+		elem.play();},10);
     };
 }
 
@@ -116,8 +119,18 @@ function cancelGestureListeners(canvas){
     canvas.ontouchmove = null;
 }
 
+function setupLoop(audioElem){
+    var loop = function(){audioElem.play()};
+    audioElem.addEventListener('ended',loop);
+    return loop;
+}
+
+var cuePlayer;
+var loopFn;
+
 states.onSendCapture = function(event,from,to){
     cancelGestureListeners(cb_canvas);
+    cuePlayer.removeEventListener("ended",loopFn,false);
     var capturedArr = new Array();
     for (idx in gestures) {
 	capturedArr.push({"gid":gestures[idx].name,"captured":gestures[idx].captured});
@@ -188,12 +201,14 @@ function setupAudioErrorListener(player){
 	console.log("error with audio occurred");
 	console.log("error is "+player.error.code);
     });
-}			   
+}	
 
 // Entry point
 window.addEventListener('load', function(){
     var config = getConfig();
-    setupAudioErrorListener(config.cuePlayer);
+    //setupAudioErrorListener(config.cuePlayer);
+    loopFn = setupLoop(config.cuePlayer);
+    cuePlayer = config.cuePlayer;
     playAudioCue = AudioPlayer(config.cuePlayer);
     fingerSprite = config.fingerSprite;
     states.run(config.prerollScreen,config.canvas,config.startButton);
