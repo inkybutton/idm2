@@ -1,7 +1,12 @@
 // Gestures that need to be captured.
+// Type explanation:
+// aovideo - Audio-only video - a video which does not have any 
+// visual content. This is created to provide compatibility with
+// how IDM2 is set up and iOS Safari limitations.
 
 var gestures = [
-    {name: "play", cues:[{type:"audio",data:"cues/Play.m4a"}]},
+    {name: "play", cues:[{type:"aovideo",data:"video/firstgesture.mp4"}]},
+    //{name: "play", cues:[{type:"audio",data:"cues/Play.m4a"}]},
     {name: "pause", cues:[{type:"audio",data:"cues/Pause.m4a"}]},
     {name: "back", cues:[{type:"audio",data:"cues/Back.m4a"}]},
     {name: "next", cues:[{type:"audio",data:"cues/Next.m4a"}]},

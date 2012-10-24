@@ -12,52 +12,76 @@ var states = StateMachine.create({
 	{ name: 'endCapture', from: 'PostInput', to:'SendCapture'}
     ]
 });
+var fingerSprite;
 var DELAY = 10000;
 var loopFnId;
-var fingerSprite;
-var playAudioCue;
 var cuePlayer;
-function AudioPlayer(elem){
+var aoVideoPlayer;
+
+function loopPlayer(audioElem,delay){
+    return setInterval(function(){audioElem.play()},delay);
+}
+
+function stopLoop(loopId){
+    clearInterval(loopId);
+}
+
+function loadCue(url,player){
+    player.src = url;
+    player.load();
+}
+
     /*
       This should only be called in a function one of whose parent
       in the call chain is a user-initiated event handler OR a media
-      event handler.
+      event handler. (Compatibility with iOS Safari)
      */
-    return function(url){
+function playCue(url,player){
 	stopLoop(loopFnId);
-	console.debug("old media is "+elem.src+", new is "+url);
-	if (elem.src.indexOf(url) == -1){
+	console.debug("loopFnId is "+loopFnId);
+	if (player.src.indexOf(url) == -1){
 	    console.debug("new media requested!");
-	    elem.src = url;
-	    elem.load();
+	    loadCue(url,player);
 	}
-	console.debug("old media requested!");
 	setTimeout( //Another call necessary for iOS to play files smoothly?
 	    function(){
-		loopFnId = loopPlayer(cuePlayer,DELAY);
-		elem.play();},10);
-    };
+		loopFnId = loopPlayer(player,DELAY);
+		player.play();},10);
 }
 
-function gestureAudioCuePath(g){
-    var r = new Array();
-    for (var k in g.cues){
-	var cueType = g.cues[k].type;
-	if (cueType == "audio"){
-	    return g.cues[k].data;
-	}
+function getBackendPlayer(cue){
+    var cueType = cue.type;
+    if (cueType == "audio"){
+	return cuePlayer;
+    } else if (cueType == "aovideo"){
+	return aoVideoPlayer;
     }
-    return r;
+}
+
+function cuePaths(cues){
+/*    for (var k in cues){
+	var cueType = cues[k].type;
+	if (cueType == "audio"){
+	    results[k] = playCue(cues[k].data,cuePlayer);
+	} else if (cueType == "aovideo"){
+	    results[k] = playCue(cues[k].data,aoVideoPlayer);
+	}
+	}*/
+    var results = new Array();
+    for (var k in cues){
+	results[k] = cues[k].data;
+    }
+    return results;
 }
 
 function performCue(cues){
     var results = new Array();
     for (var k in cues){
 	var cueType = cues[k].type;
-	if (cueType == "audiogroup"){
-	}
 	if (cueType == "audio"){
-	    results[k] = playAudioCue(cues[k].data);
+	    results[k] = playCue(cues[k].data,cuePlayer);
+	} else if (cueType == "aovideo"){
+	    results[k] = playCue(cues[k].data,aoVideoPlayer);
 	}
     }
     return results;
@@ -109,7 +133,6 @@ var inputCapture = function(container){
 		
 states.onbeginInput = function(event,from,to){
 	// First finger, starts the timer.
-	//alert("yep!")
 	timer = start(timer);
 };
 
@@ -144,31 +167,14 @@ function cancelGestureListeners(canvas){
     canvas.ontouchmove = null;
 }
 
-function setupLoop(audioElem){
-    var loop = function(){audioElem.play()};
-    audioElem.addEventListener('ended',loop);
-    return loop;
-}
-
-function loopPlayer(audioElem,delay){
-    return setInterval(function(){audioElem.play()},delay);
-}
-
-function stopLoop(loopId){
-    clearInterval(loopId);
-}
-
 states.onSendCapture = function(event,from,to){
     cancelGestureListeners(cb_canvas);
     stopLoop(loopFnId);
-    //cuePlayer.removeEventListener("ended",loopFn,false);
     var capturedArr = new Array();
     for (idx in gestures) {
 	capturedArr.push({"gid":gestures[idx].name,"captured":gestures[idx].captured});
-//	capturedArr[gestures[idx].name] = gestures[idx].captured;
     }
     console.log(capturedArr);
-    //var stringifiedData = JSON.stringify(capturedArr);
     // Naming convention for Play to bind to ScreenResolution.
     var data = {"screen.x": window.innerWidth, 
 			 "screen.y": window.innerHeight,
@@ -191,6 +197,12 @@ states.onrun = function(event,from,to,prerollScreen,canvas,startButton,prerollPl
     
 }
 
+function convertToAOVideoPlayer(player){
+    player.style.height = "1px";
+    player.style.width = "1px";
+    return player;
+}
+
 states.onloadGuide = function(e,from,to,player,canvas){
     player.style.display = "block";
     player.play();
@@ -199,9 +211,11 @@ states.onloadGuide = function(e,from,to,player,canvas){
 	//player.style.display = "block";
 	player.play();
     });
-    player.addEventListener('ended',function(){
-	player.style.display = "none";
+    player.addEventListener('ended',function endListener(){
+	aoVideoPlayer = convertToAOVideoPlayer(player);
 	canvas.style.display = "block";
+	// Remove once fired.
+	player.removeEventListener("ended",endListener,false);
 	states.startCapture();
     });	
 }
@@ -218,7 +232,7 @@ states.onstartWaiting = function(event,from,to,gesture){
 
 
 /*
-  This should only be called in a function one of whose parent
+  This should only be called in a function one of whose parents
   in the call chain is a user-initiated event handler OR a media
   event handler.
 */
@@ -227,9 +241,8 @@ states.onPrepareForCapture = function(){
     setupGestureCapture(document.getElementById("gestureCapture"));
     var g = getNextGesture();
     // Preload the first gesture cue - for compatibility reason with iPad.
-    cuePlayer.src = gestureAudioCuePath(g);
-
-    cuePlayer.play();
+    //performCue(g.cues);
+    loadCue(cuePaths(g.cues)[0],getBackendPlayer(g.cues[0]));
     if (g != null){
 	states.startWaiting(g);
     } else {
@@ -251,7 +264,7 @@ window.addEventListener('load', function(){
     //loopFn = setupLoop(config.cuePlayer);
     loopFnId = loopPlayer(config.cuePlayer,DELAY);
     cuePlayer = config.cuePlayer;
-    playAudioCue = AudioPlayer(config.cuePlayer);
+    //playAudioCue = AudioPlayer(config.cuePlayer);
     fingerSprite = config.fingerSprite;
     states.run(config.prerollScreen,config.canvas,config.startButton,
 	       config.introVideo,config.cuePlayer);
@@ -355,55 +368,4 @@ function getCoords(e) {
 	else {
 		return { x: e.pageX - cb_canvas.offsetLeft, y: e.pageY - cb_canvas.offsetTop };
 	}
-}
-
-function csvForGesture(capturedGesture){
-    var csv = "";
-    csv += capturedGesture.name + ", \r\n";
-    //alert(csv);
-    for (idx in capturedGesture){
-	if (capturedGesture[idx].time != undefined && capturedGesture[idx].touches != undefined){
-	    csv += capturedGesture[idx].time + ",";
-	 //   console.log("Idx is "+idx+", csv is now "+csv);
-	    for (touchIdx in capturedGesture[idx].touches){
-		var currPoint = capturedGesture[idx].touches[touchIdx];
-		csv += "["+ currPoint.x + ","+ currPoint.y + "]" + ",";
-	    }
-	    csv += "\r\n";
-	}
-    }
-    return csv;
-}
-
-function csvForGestures(gestures){
-    var csv = "";
-    for (idx in gestures){
-	csv += csvForGesture(gestures[idx])
-    }
-    return csv;
-}
-
-function DownloadJSON2CSV(objArray)
-{
-    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
-    
-    var str = '';
-    
-    for (var i = 0; i < array.length; i++) {
-        var line = '';
-	
-        for (var index in array[i]) {
-            line += array[i][index] + ',';
-        }
-	
-        // Here is an example where you would wrap the values in double quotes
-        // for (var index in array[i]) {
-        //    line += '"' + array[i][index] + '",';
-        // }
-	
-        line.slice(0,line.Length-1); 
-	
-        str += line + '\r\n';
-    }
-    window.open( "data:text/csv;charset=utf-8," + escape(str))
 }
