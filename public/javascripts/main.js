@@ -3,13 +3,15 @@ var states = StateMachine.create({
     events: [
 	{ name: 'run',from:'Idle',to:'StartScreen'},
 	{ name: 'loadGuide',from: 'StartScreen', to: 'Preroll'},
-	{ name: 'startCapture', from: 'Preroll', to: 'PrepareForCapture'},
+	{ name: 'startCountdown', from: ['Preroll','Postroll'], to: 'Countdown'},
+	{ name: 'startCapture', from: 'Countdown', to: 'PrepareForCapture'},
 	{ name: 'beginInput', from: 'Waiting', to: 'InputInProgress'},
 	{ name: 'moreInput', from: 'InputInProgress', to: 'InputInProgress'},
 	{ name: 'endInput', from: 'InputInProgress', to: 'PostInput'},
 	{ name: 'waitTimeout', from: 'Waiting', to: 'InputTimedOut'},
 	{ name: 'startWaiting', from: ['PostInput','InputTimedOut','PrepareForCapture'],to: 'Waiting'},
-	{ name: 'endCapture', from: 'PostInput', to:'SendCapture'}
+	{ name: 'endCapture', from: 'PostInput', to:'SendCapture'},
+	{ name: 'endScreen', from: 'SendCapture', to: 'Postroll'}
     ]
 });
 var fingerSprite;
@@ -27,8 +29,10 @@ function stopLoop(loopId){
 }
 
 function loadCue(url,player){
-    player.src = url;
-    player.load();
+    if (player.src.indexOf(url) == -1){
+	player.src = url;
+	player.load();
+    }
 }
 
     /*
@@ -59,14 +63,6 @@ function getBackendPlayer(cue){
 }
 
 function cuePaths(cues){
-/*    for (var k in cues){
-	var cueType = cues[k].type;
-	if (cueType == "audio"){
-	    results[k] = playCue(cues[k].data,cuePlayer);
-	} else if (cueType == "aovideo"){
-	    results[k] = playCue(cues[k].data,aoVideoPlayer);
-	}
-	}*/
     var results = new Array();
     for (var k in cues){
 	results[k] = cues[k].data;
@@ -98,12 +94,13 @@ var bgColour = "rgb(0,0,0)";
 var penColour = "rgb(245,236,176)";
 var labelColour = "rgb(255,255,255)";
 
-function TouchArray(touchevt){
+function TouchArray(touchevt,idTable){
     var touchesArray = new Array();
     if (touchevt.touches != undefined && touchevt.touches != null){
 	for (var i = 0;i < touchevt.touches.length;i++){
 	    var touchCoords = getCoords(touchevt.touches[i]);
-	    touchesArray.push({"fid":touchevt.touches[i].identifier,"coords":touchCoords});
+	    var id = getId(idTable,touchevt.touches[i].identifier);
+	    touchesArray.push({"fid":id,"coords":touchCoords});
 	}
 	return touchesArray;
     } else {
@@ -113,6 +110,7 @@ function TouchArray(touchevt){
 }
 
 function serialiseTouchPoints(touches,timer){
+    var timeSoFar = lap(timer);
     return {time:lap(timer),touches:touches};
 }	
 
@@ -120,10 +118,10 @@ function logTouch(serialisedTouch){
     console.log("Time: ",serialisedTouch.time,", and we have num touch points ",serialisedTouch.touches);
 }
 
-var inputCapture = function(container){
+var inputCapture = function(container,idTable){
 	return function(event,from,to,newGesturePosition){
 	    clearScreen(cb_canvas,cb_ctx,bgColour);
-	    var touches = TouchArray(newGesturePosition);
+	    var touches = TouchArray(newGesturePosition,idTable);
 	    var serialised = serialiseTouchPoints(touches,timer);
 	    drawFingers(cb_ctx,touches);
 	    //logTouch(serialised);
@@ -141,12 +139,13 @@ states.onbeginInput = function(event,from,to){
 // have left the screen. If not, it cancels the event.
 states.onbeforeendInput = function(event,from,to,touchevt){
     if (touchevt.touches != undefined){
-	console.log("End input called. Number of fingers on screen is now:"+touchevt.touches.length);
+//	console.log("End input called. Number of fingers on screen is now:"+touchevt.touches.length);
 	if (touchevt.touches.length != 0){
 	    return false;
 	}
     }
 };
+
 
 states.onPostInput = function(event,from,to){
     clearScreen(cb_canvas,cb_ctx,bgColour);
@@ -167,8 +166,10 @@ function cancelGestureListeners(canvas){
     canvas.ontouchmove = null;
 }
 
+
 states.onSendCapture = function(event,from,to){
-    cancelGestureListeners(cb_canvas);
+    cancelGestureListeners(canvas);
+    canvas.style.display = "none";
     stopLoop(loopFnId);
     var capturedArr = new Array();
     for (idx in gestures) {
@@ -179,69 +180,114 @@ states.onSendCapture = function(event,from,to){
     var data = {"screen.x": window.innerWidth, 
 			 "screen.y": window.innerHeight,
 			 "captured":JSON.stringify(capturedArr)};
-    $.post("/submit",data,function(data){
-	//alert(data);
+    $.post("/submit",data,function(){
+	//
     });
+    states.endScreen(postroll);
 };
+
+var countdown;
+
+function makeCountdown(time,tick,done){
+    var intervalId = setInterval(function(){
+	if (time != 0){
+	    time--;
+	    tick(time);
+	} else {
+	    clearInterval(intervalId);
+	    done();
+	}
+    },1000);
+}
+
+states.onCountdown = function(){
+    var countDisplay = countdown.getElementsByClassName("time")[0];
+    var secs = 3;
+    console.log(countDisplay);
+    countDisplay.innerHTML = ""+secs;
+    countdown.style.display = "block";
+    makeCountdown(secs,function(t){
+	countDisplay.innerHTML = ""+t;
+    },
+		   function(){
+		       countdown.style.display = "none";
+		       states.startCapture();
+		   });
+};
+
+var postroll;
+var restartButton;
+states.onendScreen = function(e,from,to,postElem){
+    postElem.style.display = "block";
+    restartButton.addEventListener('click',function(){
+	postElem.style.display = "none";
+	states.startCountdown()},false);
+}
 
 states.onrun = function(event,from,to,prerollScreen,canvas,startButton,prerollPlayer,cuePlayer){
     startButton.addEventListener('click',function(e){
 	e.preventDefault();
-	//states.startCapture();
-	//canvas.style.display = "block";
 	prerollScreen.style.display = "none";
-	//states.startCapture();
 	states.loadGuide(prerollPlayer,canvas,cuePlayer);
 	return false;
     });
     
 }
 
-function convertToAOVideoPlayer(player){
+function minimisePlayer(player){
     player.style.height = "1px";
     player.style.width = "1px";
     return player;
 }
 
+function restorePlayer(player){
+    player.style.height = "auto";
+    player.style.width = "auto";
+    return player;
+}
+
 states.onloadGuide = function(e,from,to,player,canvas){
-    player.style.display = "block";
-    player.play();
+    console.log("Debug: onloadGuide now called.");
+    document.getElementById("loadingMsg").style.display = "block";
+//    player.style.display = "block";
+    player.load();
     player.addEventListener('canplaythrough',function(){
-	//canvas.style.display = "none";
-	//player.style.display = "block";
+	document.getElementById("loadingMsg").style.display = "none";
+
+	player.style.display = "block";
 	player.play();
     });
     player.addEventListener('ended',function endListener(){
-	aoVideoPlayer = convertToAOVideoPlayer(player);
-	canvas.style.display = "block";
+	aoVideoPlayer = minimisePlayer(player);
 	// Remove once fired.
 	player.removeEventListener("ended",endListener,false);
-	states.startCapture();
+	states.startCountdown();
     });	
 }
 
 states.onstartWaiting = function(event,from,to,gesture){
     gesture.captured = new Array();
+    gesture.idTable = emptyIDHashtable();
     if (gesture.desc != undefined && gesture.desc != null){
 	drawStatusText(gesture.desc,cb_ctx);
     }
     performCue(gesture.cues);
-    states.onmoreInput = inputCapture(gesture.captured);
+    states.onmoreInput = inputCapture(gesture.captured,gesture.idTable);
 };
 
 
-
+var canvas;
 /*
   This should only be called in a function one of whose parents
   in the call chain is a user-initiated event handler OR a media
   event handler.
 */
 states.onPrepareForCapture = function(){
-    var canvas = document.getElementById("gestureCapture");
-    setupGestureCapture(document.getElementById("gestureCapture"));
+    setupGestureCapture(canvas);
+    getNextIteratedGesture = createIterator(gestures);
     var g = getNextGesture();
+    
     // Preload the first gesture cue - for compatibility reason with iPad.
-    //performCue(g.cues);
     loadCue(cuePaths(g.cues)[0],getBackendPlayer(g.cues[0]));
     if (g != null){
 	states.startWaiting(g);
@@ -261,14 +307,15 @@ function setupAudioErrorListener(player){
 window.addEventListener('load', function(){
     var config = getConfig();
     //setupAudioErrorListener(config.cuePlayer);
-    //loopFn = setupLoop(config.cuePlayer);
     loopFnId = loopPlayer(config.cuePlayer,DELAY);
     cuePlayer = config.cuePlayer;
-    //playAudioCue = AudioPlayer(config.cuePlayer);
+    canvas = config.canvas;
+    postroll = config.postrollScreen;
+    countdown = config.countdown;
+    restartButton = config.restartButton;
     fingerSprite = config.fingerSprite;
     states.run(config.prerollScreen,config.canvas,config.startButton,
 	       config.introVideo,config.cuePlayer);
-    //states.startCapture();
 },false);
 
 function drawStatusText(statusText,context){

@@ -1,5 +1,4 @@
 // Gestures that need to be captured.
-// Type explanation:
 // aovideo - Audio-only video - a video which does not have any 
 // visual content. This is created to provide compatibility with
 // how IDM2 is set up and iOS Safari limitations.

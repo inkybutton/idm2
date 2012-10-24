@@ -10,10 +10,13 @@
           "canvas":document.getElementById("gestureCapture"),
           "introVideo":document.getElementById("introVideo"),
           "cuePlayer":document.getElementById("audioCuePlayer"),
+          "countdown":document.getElementById("countdown"),
           "fingerSprite":{data:sprite,
                           centreX:sprite.width/2,
                           centreY:sprite.height/2},
+          "restartButton":document.getElementById("redoButton"),
           "prerollScreen":document.getElementById("preroll"),
+          "postrollScreen":document.getElementById("postroll"),
           "startButton":document.getElementById("startButton")
        };
     }
@@ -30,8 +33,8 @@
   <script type="text/javascript" src="public/javascripts/state-machine.js"></script>
   <script type="text/javascript" src="public/javascripts/gestures.js"></script>
   <script type="text/javascript" src="public/javascripts/simple-timer.js"></script>
+  <script type="text/javascript" src="public/javascripts/idhash.js"></script>
   <script type="text/javascript" src="public/javascripts/simple-canvas.js"></script>
-  <script type="text/javascript" src="public/javascripts/underscore.js"></script>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
   <script type="text/javascript" src="public/javascripts/main.js"></script>
   <link rel="stylesheet" href="public/stylesheets/styles.css"></link>
@@ -39,17 +42,30 @@
 <body>
 <img src="public/images/glow.png" id="glow"  style="display:none">
 <div id="preroll">
-  <p class="appTitle"> Interface Design Machine 2.0</p>
+  <p class="title"> Interface Design Machine 2.0</p>
   <p> Designed By Ben Jarrett</p>
   <p> Coded By Noel Zeng</p>
   <div class="buttons">
     <a href="#" id="startButton"><img src="public/images/start.png" id="start"></a>
   </div>
 </div>
+<div id="loadingMsg">Loading</div>
+<div id="countdown">
+  <p class="title">Ready?</p>
+  <p class="time"></p>
+</div>
+<div id="postroll">
+  <p class="title"> Thanks for Participating!</p>
+  <div class="buttons">
+    <a href="http://www.metier.co/interface-design-machine-2-0/" id="finishButton"><img src="public/images/finish.png"></a>
+    <a href="#" id="redoButton"><img src="public/images/redo.png"></a>
+  </div>
+</div>
+
 <canvas id="gestureCapture" width="400" height="500" style="display:none">
   <strong> Your browser isn't new enough to support gesture capturing. Please upgrade your operating system and/or browser. </strong>
 </canvas>
 <audio id="audioCuePlayer"></audio>
-<video id="introVideo" src="video/intro.mp4" width="640" height="480" controls></video>
+<video id="introVideo" src="video/intro.mp4" width="640" height="480"></video>
 </body>
 </html>
