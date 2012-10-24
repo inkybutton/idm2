@@ -24,30 +24,34 @@ public class Application extends Controller {
     /**
      * Allows an asset file to be shared partially.
      * Code derived from https://gist.github.com/1781977.
-     * @param fileName - A path relative to the /public directory.
+     * @param relPath - A path relative to the /public directory.
      */
-
-    public static void cues(String fileName){
+    
+    private static void partial(String relPath){
         response.setHeader("Accept-Ranges", "bytes");
-        VirtualFile f = VirtualFile.fromRelativePath("/public/assets/cues/"+fileName);
+        VirtualFile f = VirtualFile.fromRelativePath(relPath);
         if (!f.exists()){
             notFound();
         }
         InputStream underlyingFile = f.inputstream();
         File realFile = f.getRealFile();
-        //String fileName = ...//name of the file
-
         Http.Header rangeHeader = request.headers.get("range");
         if (rangeHeader != null) {
-            throw new PartialContent(realFile, fileName);
+            throw new PartialContent(realFile, relPath);
         } else {
 
             renderBinary(underlyingFile,
-                    fileName, realFile.length(),
-                    MimeTypes.getContentType(fileName), false);
+                    relPath, realFile.length(),
+                    MimeTypes.getContentType(relPath), false);
         }
+    }
 
-
+    public static void cues(String fileName){
+        partial("/public/assets/cues/"+fileName);
+    }
+    
+    public static void video(String fileName){
+        partial("/public/assets/videos/"+fileName);
     }
 
     public static void iostest(){

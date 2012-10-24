@@ -18,22 +18,35 @@ body {
 #gestureCapture {
     position:relative;
 }
+/*
+#videoWrapper {
+   display:table;
+    border:1px dashed blue;
+    height: 100%;
+    width: 100%;
+}
+*/
 
-#video {
+#introVideo {
 /*    margin: 0 auto;
-    width:640px;
-    height:480px;
-    position:absolute;
-    top: 10%;
-    left:0;
-    right:0;
-    margin-left:auto;
-    margin-right:auto;
-  position: absolute;
-  width: 60%;
-  height: 30%;
-  left: 20%;
-  top: 35%;*/
+    display: table-cell;
+    vertical-align:middle;*/
+    margin: 0 auto;
+    display:none;
+/*    vertical-align: middle;
+     width:640px;
+     height:480px;
+     position:absolute;
+     top: 10%;
+     left:0;
+     right:0;
+     margin-left:auto;
+     margin-right:auto;
+     position: absolute;
+     width: 60%;
+     height: 30%;
+     left: 20%;
+     top: 35%;*/
 }
 
 #preroll {
@@ -62,4 +75,8 @@ body {
     left:20%;
 */
     text-align:center;
+}
+
+#postroll {
+    display:none;
 }
