@@ -31,7 +31,22 @@ function stopLoop(loopId){
 function loadCue(url,player){
     if (player.src.indexOf(url) == -1){
 	player.src = url;
+	var loadTime = start(createTimer());
 	player.load();
+	player.addEventListener('loadstart',function f(){
+	    console.log("loadCue: Media "+url+" has started loading "+lap(loadTime) + " since start");
+	    player.removeEventListener('loadstart',f,false);
+	});
+	player.addEventListener('loadeddata',function f(){
+	    console.log("loadCue: Media "+url+" can play "+lap(loadTime) + " since start");
+	    player.removeEventListener('loadeddata',f,false);
+	});
+
+	player.addEventListener('canplaythrough',function f(){
+	    console.log("loadCue: Media "+url+" can be played through."+lap(loadTime) + " since start");
+	    player.removeEventListener('canplaythrough',f,false);
+
+	});
     }
 }
 
@@ -249,11 +264,9 @@ function restorePlayer(player){
 states.onloadGuide = function(e,from,to,player,canvas){
     console.log("Debug: onloadGuide now called.");
     document.getElementById("loadingMsg").style.display = "block";
-//    player.style.display = "block";
     player.load();
     player.addEventListener('canplaythrough',function(){
 	document.getElementById("loadingMsg").style.display = "none";
-
 	player.style.display = "block";
 	player.play();
     });

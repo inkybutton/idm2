@@ -27,7 +27,7 @@ public class Application extends Controller {
      * @param relPath - A path relative to the /public directory.
      */
     
-    private static void partial(String relPath){
+    private static void renderPartial(String relPath){
         response.setHeader("Accept-Ranges", "bytes");
         VirtualFile f = VirtualFile.fromRelativePath(relPath);
         if (!f.exists()){
@@ -47,11 +47,11 @@ public class Application extends Controller {
     }
 
     public static void cues(String fileName){
-        partial("/public/assets/cues/"+fileName);
+        renderPartial("/public/assets/cues/"+fileName);
     }
     
     public static void video(String fileName){
-        partial("/public/assets/videos/"+fileName);
+        renderPartial("/public/assets/videos/"+fileName);
     }
 
     public static void iostest(){
