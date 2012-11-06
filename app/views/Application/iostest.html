@@ -4,10 +4,7 @@
   <meta charset="utf-8">
   <title>The HTML5 File</title>
   <meta name="description" content="The HTML5 File">
-  <!--[if lt IE 9]>
-  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
-
+  <script type="text/javascript" src="/public/javascripts/simple-timer.js"></script>
 </head>
 <body>
 <!--<audio id="wavmusic" src="/public/assets/cues/Play.wav" controls>-->
@@ -18,7 +15,7 @@
 <p>Using local file with partial content: <audio id="localwav" src='@@{Application.cues("Play.wav")}' controls></audio></p>
 <p>Using local file with partial content, 2: <audio id="localwav2" src='@@{Application.cues("ScrollForward.m4a")}' controls></audio></p>
 <p>An external M4A: <audio id="m4aaudio" src="http://dl.dropbox.com/u/1538714/article_resources/cat.m4a" type="audio/mpeg" controls></audio></p>
-<p>A local M4a: <audio id="m4aaudio" src="http://192.168.1.3:9000/public/assets/test/cat.m4a" type="audio/mpeg" controls></audio></p>
+<p>A local M4a: <audio id="m4aaudio" src="public/assets/test/cat.m4a" type="audio/mpeg" controls></audio></p>
 
 <h2> 2. Trigger test.</h2>
 <p><a href="#" onclick="play(document.getElementById('mp3music'))"> Click to play. </a></p>
@@ -36,8 +33,39 @@
 <h2>4. Delayed Play</h2>
 <p><a href="#" onclick="delayPlay(document.getElementById('localwav2'));">Load, then play 5 seconds later.</a></p>
 
-<h2>5. </h2>
-  <script type="text/javascript">
+<h2>5. new Media() Method</h2>
+<p><a href="#" onclick="new Audio('/cues/Pause.m4a').play();">Play Audio ctor media.</a></p>
+<p><a href="#" onclick="instrumentedPlayWithCtor('/cues/Pause.m4a');">Instrumented play audio ctor media.</a></p>
+<video src="/video/firstgesture.mp4" controls id="a"></video>
+<p><a href="#" onclick="
+
+
+  <script type="text/javascript"> 
+
+    function instrument(player,url,loadTime){
+        player.addEventListener('loadstart',function f(){
+	    console.log("loadCue: Media "+url+" has started loading "+lap(loadTime) + " since start");
+	    player.removeEventListener('loadstart',f,false);
+	});
+	player.addEventListener('loadeddata',function f(){
+	    console.log("loadCue: Media "+url+" can play "+lap(loadTime) + " since start");
+	    player.removeEventListener('loadeddata',f,false);
+	});
+
+	player.addEventListener('canplaythrough',function f(){
+	    console.log("loadCue: Media "+url+" can be played through."+lap(loadTime) + " since start");
+	    player.removeEventListener('canplaythrough',f,false);
+
+	});
+        return player;
+    }
+
+    function instrumentedPlayWithCtor(url){
+        var player = new Audio(url);
+        var time = start(createTimer());
+        player.play();
+        instrument(player,url,time);
+    }
 
     function delayPlay(player){
         player.load();

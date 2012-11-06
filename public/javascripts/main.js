@@ -31,23 +31,30 @@ function stopLoop(loopId){
 function loadCue(url,player){
     if (player.src.indexOf(url) == -1){
 	player.src = url;
+	// new Audio() method
+	//var player = new Audio(url);
 	var loadTime = start(createTimer());
+	instrument(player,url,loadTime);
 	player.load();
-	player.addEventListener('loadstart',function f(){
-	    console.log("loadCue: Media "+url+" has started loading "+lap(loadTime) + " since start");
-	    player.removeEventListener('loadstart',f,false);
-	});
-	player.addEventListener('loadeddata',function f(){
-	    console.log("loadCue: Media "+url+" can play "+lap(loadTime) + " since start");
-	    player.removeEventListener('loadeddata',f,false);
-	});
-
-	player.addEventListener('canplaythrough',function f(){
-	    console.log("loadCue: Media "+url+" can be played through."+lap(loadTime) + " since start");
-	    player.removeEventListener('canplaythrough',f,false);
-
-	});
     }
+}
+
+function instrument(player,url,loadTime){
+    player.addEventListener('loadstart',function f(){
+	console.log("loadCue: Media "+url+" has started loading "+lap(loadTime) + " since start");
+	player.removeEventListener('loadstart',f,false);
+    });
+    player.addEventListener('loadeddata',function f(){
+	console.log("loadCue: Media "+url+" can play "+lap(loadTime) + " since start");
+	player.removeEventListener('loadeddata',f,false);
+    });
+
+    player.addEventListener('canplaythrough',function f(){
+	console.log("loadCue: Media "+url+" can be played through."+lap(loadTime) + " since start");
+	player.removeEventListener('canplaythrough',f,false);
+
+    });
+    return player;
 }
 
     /*
@@ -90,7 +97,8 @@ function performCue(cues){
     for (var k in cues){
 	var cueType = cues[k].type;
 	if (cueType == "audio"){
-	    results[k] = playCue(cues[k].data,cuePlayer);
+	   //results[k] = playCue(cues[k].data,cuePlayer);
+	    results[k] = playCue(cues[k].data,new Audio());
 	} else if (cueType == "aovideo"){
 	    results[k] = playCue(cues[k].data,aoVideoPlayer);
 	}
