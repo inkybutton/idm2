@@ -77,6 +77,14 @@ body {
     text-align:center;
 }
 
+#postroll .buttons {
+    padding-top:100px;
+}
+
+#postroll .buttons #finishButton {
+    padding-right:130px;
+}
+
 #postroll,#countdown {
     display:none;
 }

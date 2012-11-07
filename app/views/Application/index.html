@@ -14,6 +14,7 @@
           "fingerSprite":{data:sprite,
                           centreX:sprite.width/2,
                           centreY:sprite.height/2},
+          "canvasBg":document.getElementById("canvasBg"),
           "restartButton":document.getElementById("redoButton"),
           "prerollScreen":document.getElementById("preroll"),
           "postrollScreen":document.getElementById("postroll"),
@@ -35,12 +36,14 @@
   <script type="text/javascript" src="public/javascripts/simple-timer.js"></script>
   <script type="text/javascript" src="public/javascripts/idhash.js"></script>
   <script type="text/javascript" src="public/javascripts/simple-canvas.js"></script>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-  <script type="text/javascript" src="public/javascripts/main.js"></script>
+<!--  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>-->
+  <script type="text/javascript" src="public/javascripts/main.js"></script>  
+  <script type="text/javascript" src="public/javascripts/jquery.min.js"></script>
   <link rel="stylesheet" href="public/stylesheets/styles.css"></link>
 </head>
 <body>
 <img src="public/images/glow.png" id="glow"  style="display:none">
+<img src="public/images/bg.png" id="canvasBg" style="display:none">
 <div id="preroll">
   <p class="title"> Interface Design Machine 2.0</p>
   <p> Designed By Ben Jarrett</p>
@@ -66,6 +69,6 @@
   <strong> Your browser isn't new enough to support gesture capturing. Please upgrade your operating system and/or browser. </strong>
 </canvas>
 <audio id="audioCuePlayer"></audio>
-<video id="introVideo" src="video/intro.mp4" width="640" height="480" controls></video>
+<video id="introVideo" src="video/intro.mp4" width="640" height="480"></video>
 </body>
 </html>

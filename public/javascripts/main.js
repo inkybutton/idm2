@@ -15,6 +15,7 @@ var states = StateMachine.create({
     ]
 });
 var fingerSprite;
+var canvasBg;
 var DELAY = 10000;
 var loopFnId;
 var cuePlayer;
@@ -141,12 +142,26 @@ function logTouch(serialisedTouch){
     console.log("Time: ",serialisedTouch.time,", and we have num touch points ",serialisedTouch.touches);
 }
 
+function drawBackground(context,canvasBg,canvas){
+    var startX = canvas.width/2 - canvasBg.width/2;
+    var startY = canvas.height/2 - canvasBg.height/2;
+    context.drawImage(canvasBg,startX,startY);
+}
+
+function drawDisplay(context,touches,canvasBg,canvas){
+    drawBackground(context,canvasBg,canvas);
+    if (touches != null || touches != undefined){
+	drawFingers(context,touches);
+    }
+}
+
 var inputCapture = function(container,idTable){
 	return function(event,from,to,newGesturePosition){
 	    clearScreen(cb_canvas,cb_ctx,bgColour);
 	    var touches = TouchArray(newGesturePosition,idTable);
 	    var serialised = serialiseTouchPoints(touches,timer);
-	    drawFingers(cb_ctx,touches);
+	    drawDisplay(cb_ctx,touches,canvasBg,canvas);
+	    //drawFingers(cb_ctx,touches);
 	    //logTouch(serialised);
 	    container.push(serialised);
 	};
@@ -174,7 +189,7 @@ states.onPostInput = function(event,from,to){
     clearScreen(cb_canvas,cb_ctx,bgColour);
     var nextGesture = getNextGesture();
     if (nextGesture != null){
-	states.startWaiting(nextGesture);
+	setTimeout(function(){states.startWaiting(nextGesture)},1000);
     } else {
 	states.endCapture();
     }
@@ -292,6 +307,7 @@ states.onstartWaiting = function(event,from,to,gesture){
     if (gesture.desc != undefined && gesture.desc != null){
 	drawStatusText(gesture.desc,cb_ctx);
     }
+    drawDisplay(cb_ctx,null,canvasBg,canvas);
     performCue(gesture.cues);
     states.onmoreInput = inputCapture(gesture.captured,gesture.idTable);
 };
@@ -331,6 +347,7 @@ window.addEventListener('load', function(){
     loopFnId = loopPlayer(config.cuePlayer,DELAY);
     cuePlayer = config.cuePlayer;
     canvas = config.canvas;
+    canvasBg = config.canvasBg;
     postroll = config.postrollScreen;
     countdown = config.countdown;
     restartButton = config.restartButton;
