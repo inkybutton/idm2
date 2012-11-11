@@ -16,7 +16,10 @@ var states = StateMachine.create({
 });
 var fingerSprite;
 var canvasBg;
-var DELAY = 10000;
+var REPLAY_CUE_DELAY = 10000;
+var GRID_DISAPPEAR_DELAY = 200;
+var NEXT_GESTURE_DELAY = 1200;
+var GESTURE_QUEUE = null;
 var loopFnId;
 var cuePlayer;
 var aoVideoPlayer;
@@ -29,6 +32,23 @@ function stopLoop(loopId){
     clearInterval(loopId);
 }
 
+function getBackendPlayer(cue){
+    var cueType = cue.type;
+    if (cueType == "audio"){
+	return cuePlayer;
+    } else if (cueType == "aovideo"){
+	return aoVideoPlayer;
+    }
+}
+
+function cuePaths(cues){
+    var results = new Array();
+    for (var k in cues){
+	results[k] = cues[k].data;
+    }
+    return results;
+}
+
 function loadCue(url,player){
     if (player.src.indexOf(url) == -1){
 	player.src = url;
@@ -37,7 +57,16 @@ function loadCue(url,player){
 	var loadTime = start(createTimer());
 	instrument(player,url,loadTime);
 	player.load();
+	return player;
     }
+}
+
+/*
+Temporary hack atm - loadCues should be able to test whether the browser accepts a cue.
+If not, then try the next one etc.
+*/
+function loadPlayableCue(gesture){
+        return loadCue(cuePaths(gesture.cues)[0],getBackendPlayer(gesture.cues[0]));
 }
 
 function instrument(player,url,loadTime){
@@ -72,26 +101,11 @@ function playCue(url,player){
 	}
 	setTimeout( //Another call necessary for iOS to play files smoothly?
 	    function(){
-		loopFnId = loopPlayer(player,DELAY);
+		loopFnId = loopPlayer(player,REPLAY_CUE_DELAY);
 		player.play();},10);
 }
 
-function getBackendPlayer(cue){
-    var cueType = cue.type;
-    if (cueType == "audio"){
-	return cuePlayer;
-    } else if (cueType == "aovideo"){
-	return aoVideoPlayer;
-    }
-}
 
-function cuePaths(cues){
-    var results = new Array();
-    for (var k in cues){
-	results[k] = cues[k].data;
-    }
-    return results;
-}
 
 function performCue(cues){
     var results = new Array();
@@ -99,7 +113,7 @@ function performCue(cues){
 	var cueType = cues[k].type;
 	if (cueType == "audio"){
 	   //results[k] = playCue(cues[k].data,cuePlayer);
-	    results[k] = playCue(cues[k].data,new Audio());
+	    results[k] = playCue(cues[k].data,cuePlayer);
 	} else if (cueType == "aovideo"){
 	    results[k] = playCue(cues[k].data,aoVideoPlayer);
 	}
@@ -149,6 +163,7 @@ function drawBackground(context,canvasBg,canvas){
 }
 
 function drawDisplay(context,touches,canvasBg,canvas){
+    clearScreen(canvas,context,bgColour);
     drawBackground(context,canvasBg,canvas);
     if (touches != null || touches != undefined){
 	drawFingers(context,touches);
@@ -157,7 +172,7 @@ function drawDisplay(context,touches,canvasBg,canvas){
 
 var inputCapture = function(container,idTable){
 	return function(event,from,to,newGesturePosition){
-	    clearScreen(cb_canvas,cb_ctx,bgColour);
+	    //clearScreen(cb_canvas,cb_ctx,bgColour);
 	    var touches = TouchArray(newGesturePosition,idTable);
 	    var serialised = serialiseTouchPoints(touches,timer);
 	    drawDisplay(cb_ctx,touches,canvasBg,canvas);
@@ -186,10 +201,13 @@ states.onbeforeendInput = function(event,from,to,touchevt){
 
 
 states.onPostInput = function(event,from,to){
-    clearScreen(cb_canvas,cb_ctx,bgColour);
-    var nextGesture = getNextGesture();
-    if (nextGesture != null){
-	setTimeout(function(){states.startWaiting(nextGesture)},1000);
+    var g = nextGesture(GESTURE_QUEUE);
+    if (g != null){
+	//loadCue(cuePaths(g.cues)[0],getBackendPlayer(g.cues[0]));
+	loadPlayableCue(g);
+	drawDisplay(cb_ctx,null,canvasBg,canvas);
+	setTimeout(clearScreen,GRID_DISAPPEAR_DELAY,canvas,cb_ctx,bgColour);
+	setTimeout(function(){states.startWaiting(g)},NEXT_GESTURE_DELAY);
     } else {
 	states.endCapture();
     }
@@ -241,7 +259,6 @@ function makeCountdown(time,tick,done){
 states.onCountdown = function(){
     var countDisplay = countdown.getElementsByClassName("time")[0];
     var secs = 3;
-    console.log(countDisplay);
     countDisplay.innerHTML = ""+secs;
     countdown.style.display = "block";
     makeCountdown(secs,function(t){
@@ -288,15 +305,18 @@ states.onloadGuide = function(e,from,to,player,canvas){
     console.log("Debug: onloadGuide now called.");
     document.getElementById("loadingMsg").style.display = "block";
     player.load();
-    player.addEventListener('canplaythrough',function(){
+    player.addEventListener('canplaythrough',function f(){
+	player.removeEventListener("canplaythrough",f,false);
 	document.getElementById("loadingMsg").style.display = "none";
 	player.style.display = "block";
 	player.play();
     });
     player.addEventListener('ended',function endListener(){
-	aoVideoPlayer = minimisePlayer(player);
-	// Remove once fired.
+	// Remove once fired
 	player.removeEventListener("ended",endListener,false);
+	aoVideoPlayer = minimisePlayer(player);
+	// Preload the first gesture cue - for compatibility and performance reasons with iPad.
+    	loadPlayableCue(peekGesture(GESTURE_QUEUE));
 	states.startCountdown();
     });	
 }
@@ -321,11 +341,9 @@ var canvas;
 */
 states.onPrepareForCapture = function(){
     setupGestureCapture(canvas);
-    getNextIteratedGesture = createIterator(gestures);
-    var g = getNextGesture();
+    //getNextIteratedGesture = createIterator(gestures);
+    var g = nextGesture(GESTURE_QUEUE);
     
-    // Preload the first gesture cue - for compatibility reason with iPad.
-    loadCue(cuePaths(g.cues)[0],getBackendPlayer(g.cues[0]));
     if (g != null){
 	states.startWaiting(g);
     } else {
@@ -343,8 +361,9 @@ function setupAudioErrorListener(player){
 // Entry point
 window.addEventListener('load', function(){
     var config = getConfig();
+    GESTURE_QUEUE = makeQueue(gestures);
     //setupAudioErrorListener(config.cuePlayer);
-    loopFnId = loopPlayer(config.cuePlayer,DELAY);
+    loopFnId = loopPlayer(config.cuePlayer,REPLAY_CUE_DELAY);
     cuePlayer = config.cuePlayer;
     canvas = config.canvas;
     canvasBg = config.canvasBg;

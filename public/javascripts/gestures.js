@@ -18,6 +18,47 @@ var gestures = [
     {name: "volumeup", cues:[{type:"audio",data:"cues/VolumeUp.m4a"}]},
 ];
 
+function makeQueue(array){
+    return {
+	i:0,
+	queue:array};
+}
+
+function peek(q){
+    if (q.i < q.queue.length){
+	return q.queue[q.i];
+    } else {
+	return null;
+    }
+}
+
+function pop(q){
+    if (q.i < q.queue.length){
+	var popped = q.queue[q.i];
+	q.i++;
+	return popped;
+    }else {
+	return null;
+    }
+}
+
+function nextGesture(q){
+    var g = pop(q);
+    if (g != null && (g["capturedGesture"] == undefined || g["capturedGesture"] == null)){
+	g["capturedGesture"] = Array();
+    }
+    return g;
+}
+
+function peekGesture(q){
+    var g = peek(q);   
+    if (g != null && (g["capturedGesture"] == undefined || g["capturedGesture"] == null)){
+	g["capturedGesture"] = Array();
+    }
+    return g;
+}
+
+/*
 function createIterator(arrayToIterate){
     var i = 0;
     return function(){
@@ -32,10 +73,10 @@ function createIterator(arrayToIterate){
 
 var getNextIteratedGesture = createIterator(gestures);
 
-/*
+
   This function generates a new array for the gesture capture
   that the draw functions can mutate and update.
-*/
+
 var getNextGesture = function(){
     var array = getNextIteratedGesture();
     if (array != null){
@@ -43,3 +84,4 @@ var getNextGesture = function(){
     }
     return array;
 };
+*/

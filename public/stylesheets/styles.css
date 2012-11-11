@@ -28,25 +28,10 @@ body {
 */
 
 #introVideo {
-/*    margin: 0 auto;
-    display: table-cell;
-    vertical-align:middle;*/
     margin: 0 auto;
-    display:none;
-/*    vertical-align: middle;
-     width:640px;
-     height:480px;
-     position:absolute;
-     top: 10%;
-     left:0;
-     right:0;
-     margin-left:auto;
-     margin-right:auto;
-     position: absolute;
-     width: 60%;
-     height: 30%;
-     left: 20%;
-     top: 35%;*/
+    position:fixed;
+    height: 100%;
+    width: 100%;
 }
 
 #preroll, #postroll,#countdown {

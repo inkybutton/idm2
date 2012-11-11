@@ -1,8 +1,6 @@
 package controllers;
 
-import models.CaptureSession;
-import models.CapturedGesture;
-import models.ScreenResolution;
+import models.*;
 import play.libs.MimeTypes;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -110,5 +108,13 @@ public class Application extends Controller {
                 e.printStackTrace();
             }
         } 
+    }
+
+    public static void clearData(){
+        Touch.deleteAll();
+        GestureInstant.deleteAll();
+        CapturedGesture.deleteAll();
+        CaptureSession.deleteAll();
+        overview();
     }
 }

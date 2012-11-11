@@ -12,8 +12,8 @@ GET     /video/{fileName}                       Application.video
 GET     /new                                    Application.getNewCSV
 GET     /old                                    Application.getOldCSV
 GET     /all                                    Application.getAllCSV
-GET     /overview                                   Application.overview
-
+GET     /overview                               Application.overview
+GET	/cleardata				Application.clearData
 # Ignore favicon requests
 GET     /favicon.ico                            404
 
@@ -21,4 +21,4 @@ GET     /favicon.ico                            404
 GET     /public/                                staticDir:public
 
 # Catch all
-*       /{controller}/{action}                  {controller}.{action}
+#*       /{controller}/{action}                  {controller}.{action}
