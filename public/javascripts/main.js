@@ -305,14 +305,15 @@ states.onloadGuide = function(e,from,to,player,canvas){
     console.log("Debug: onloadGuide now called.");
     document.getElementById("loadingMsg").style.display = "block";
     player.load();
+    player.style.display = "none";
     player.addEventListener('canplaythrough',function f(){
-	player.removeEventListener("canplaythrough",f,false);
 	document.getElementById("loadingMsg").style.display = "none";
 	player.style.display = "block";
 	player.play();
     });
     player.addEventListener('ended',function endListener(){
 	// Remove once fired
+	player.removeEventListener("canplaythrough",f,false);
 	player.removeEventListener("ended",endListener,false);
 	aoVideoPlayer = minimisePlayer(player);
 	// Preload the first gesture cue - for compatibility and performance reasons with iPad.
