@@ -101,7 +101,9 @@ function playCue(url,player){
 	}
 	setTimeout( //Another call necessary for iOS to play files smoothly?
 	    function(){
-		loopFnId = loopPlayer(player,REPLAY_CUE_DELAY);
+		player.addEventListener('playing',function f(){
+		    loopFnId = loopPlayer(player,REPLAY_CUE_DELAY);
+		    player.removeEventListener('playing',f,false);});
 		player.play();},10);
 }
 
@@ -276,6 +278,7 @@ states.onendScreen = function(e,from,to,postElem){
     postElem.style.display = "block";
     restartButton.addEventListener('click',function(){
 	postElem.style.display = "none";
+	GESTURE_QUEUE = makeQueue(gestures); // Reset the queue.
 	states.startCountdown()},false);
 }
 
@@ -286,7 +289,7 @@ states.onrun = function(event,from,to,prerollScreen,canvas,startButton,prerollPl
 	states.loadGuide(prerollPlayer,canvas,cuePlayer);
 	return false;
     });
-    
+    prerollScreen.style.display = "block";
 }
 
 function minimisePlayer(player){

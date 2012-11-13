@@ -34,7 +34,9 @@ public class Application extends Controller {
         InputStream underlyingFile = f.inputstream();
         File realFile = f.getRealFile();
         Http.Header rangeHeader = request.headers.get("range");
+        //System.out.println("header is "+rangeHeader);
         if (rangeHeader != null) {
+            //System.out.println("Content is "+rangeHeader.value());
             throw new PartialContent(realFile, relPath);
         } else {
 
