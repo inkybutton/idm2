@@ -93,7 +93,7 @@ function instrument(player,url,loadTime){
       event handler. (Compatibility with iOS Safari)
      */
 function playCue(url,player){
-	stopLoop(loopFnId);
+	//stopLoop(loopFnId);
 	console.debug("loopFnId is "+loopFnId);
 	if (player.src.indexOf(url) == -1){
 	    console.debug("new media requested!");
@@ -203,6 +203,7 @@ states.onbeforeendInput = function(event,from,to,touchevt){
 
 
 states.onPostInput = function(event,from,to){
+    stopLoop(loopFnId);
     var g = nextGesture(GESTURE_QUEUE);
     if (g != null){
 	//loadCue(cuePaths(g.cues)[0],getBackendPlayer(g.cues[0]));
@@ -228,7 +229,7 @@ function cancelGestureListeners(canvas){
 states.onSendCapture = function(event,from,to){
     cancelGestureListeners(canvas);
     canvas.style.display = "none";
-    stopLoop(loopFnId);
+    //
     var capturedArr = new Array();
     for (idx in gestures) {
 	capturedArr.push({"gid":gestures[idx].name,"captured":gestures[idx].captured});
