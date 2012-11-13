@@ -369,7 +369,7 @@ window.addEventListener('load', function(){
     var config = getConfig();
     GESTURE_QUEUE = makeQueue(gestures);
     //setupAudioErrorListener(config.cuePlayer);
-    loopFnId = loopPlayer(config.cuePlayer,REPLAY_CUE_DELAY);
+    //loopFnId = loopPlayer(config.cuePlayer,REPLAY_CUE_DELAY);
     cuePlayer = config.cuePlayer;
     canvas = config.canvas;
     canvasBg = config.canvasBg;
