@@ -9,11 +9,14 @@ GET     /cues/{fileName}                        Application.cues
 GET     /video/{fileName}                       Application.video
 # Replace routes with others to hide gesture interface data, if you wish.
 
-GET     /new                                    Application.getNewCSV
-GET     /old                                    Application.getOldCSV
-GET     /all                                    Application.getAllCSV
-GET     /overview                               Application.overview
-GET	/cleardata				Application.clearData
+#GET     /new                                    Application.getNewCSV
+#GET     /old                                    Application.getOldCSV
+#GET     /all                                    Application.getAllCSV
+GET     /AKLDJEKLV33                                    Application.getNewCSV
+GET     /DKBLAKSW11                                    Application.getOldCSV
+GET     /BKAIOVSA3341                                    Application.getAllCSV
+GET     /bens-idm-overview                               Application.overview
+GET	/KAKLEIOQBKSA				Application.clearData
 # Ignore favicon requests
 GET     /favicon.ico                            404
 
