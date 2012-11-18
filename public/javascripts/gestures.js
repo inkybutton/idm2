@@ -4,7 +4,7 @@
 // how IDM2 is set up and iOS Safari limitations.
 
 var gestures = [
-    {name: "play", cues:[{type:"aovideo",data:"video/firstgesture.mp4"}]},
+    {name: "volumedown", cues:[{type:"aovideo",data:"video/VolumeDown.mp4"}]},
     //{name: "play", cues:[{type:"audio",data:"cues/Play.m4a"}]},
     {name: "pause", cues:[{type:"audio",data:"cues/Pause.m4a"}]},
     {name: "back", cues:[{type:"audio",data:"cues/Back.m4a"}]},
@@ -14,7 +14,7 @@ var gestures = [
    // {name: "scrollbackward", cues:[{type:"audio",data:"cues/ScrollBackward.m4a"}]},
    // {name: "scrollforward", cues:[{type:"audio",data:"cues/ScrollForward.m4a"}]},
     {name: "stop", cues:[{type:"audio",data:"cues/Stop.m4a"}]},
-    {name: "volumedown", cues:[{type:"audio",data:"cues/VolumeDown.m4a"}]},
+    {name: "play", cues:[{type:"audio",data:"cues/Play.m4a"}]},
     {name: "volumeup", cues:[{type:"audio",data:"cues/VolumeUp.m4a"}]},
 ];
 
